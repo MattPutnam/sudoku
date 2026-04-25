@@ -126,3 +126,19 @@ export function clone(board: Board): Board {
     ),
   };
 }
+
+export function eliminateCandidates(
+  board: Board,
+  eliminations: Map<string, number[]>,
+): Board {
+  const newBoard = clone(board);
+  for (const [key, digits] of eliminations) {
+    const [row, col] = key.split(',').map(Number);
+    const cell = newBoard.cells[row][col];
+    if (cell.value !== null) continue;
+    for (const digit of digits) {
+      cell.candidates.delete(digit);
+    }
+  }
+  return newBoard;
+}

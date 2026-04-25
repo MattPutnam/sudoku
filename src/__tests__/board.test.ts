@@ -7,6 +7,7 @@ import {
   getPeers,
   setCellValue,
   clone,
+  eliminateCandidates,
 } from '../board';
 
 // A well-known puzzle: "easy" difficulty
@@ -287,5 +288,76 @@ describe('clone', () => {
     const board = createBoard(PUZZLE);
     const cloned = clone(board);
     expect(cloned.cells[0][0]).not.toBe(board.cells[0][0]);
+  });
+});
+
+describe('eliminateCandidates', () => {
+  it('removes specified candidates from empty cells', () => {
+    const board = createBoard(PUZZLE);
+    const cell = board.cells[0][2]; // empty cell
+    const candidateBefore = [...cell.candidates];
+    expect(candidateBefore.length).toBeGreaterThan(0);
+
+    const toRemove = [candidateBefore[0]];
+    const eliminations = new Map<string, number[]>([['0,2', toRemove]]);
+    const result = eliminateCandidates(board, eliminations);
+
+    expect(result.cells[0][2].candidates.has(toRemove[0])).toBe(false);
+    for (const c of candidateBefore.slice(1)) {
+      expect(result.cells[0][2].candidates.has(c)).toBe(true);
+    }
+  });
+
+  it('does not mutate the original board', () => {
+    const board = createBoard(PUZZLE);
+    const cell = board.cells[0][2];
+    const candidatesBefore = new Set(cell.candidates);
+
+    const toRemove = [...cell.candidates];
+    const eliminations = new Map<string, number[]>([['0,2', toRemove]]);
+    eliminateCandidates(board, eliminations);
+
+    expect(board.cells[0][2].candidates).toEqual(candidatesBefore);
+  });
+
+  it('returns equivalent board for empty map', () => {
+    const board = createBoard(PUZZLE);
+    const result = eliminateCandidates(board, new Map());
+
+    for (let r = 0; r < 9; r++) {
+      for (let c = 0; c < 9; c++) {
+        expect(result.cells[r][c].value).toBe(board.cells[r][c].value);
+        expect(result.cells[r][c].candidates).toEqual(board.cells[r][c].candidates);
+      }
+    }
+    // But it should be a different object (cloned)
+    expect(result).not.toBe(board);
+  });
+
+  it('skips cells that have a value set', () => {
+    const board = createBoard(PUZZLE);
+    // cell [0][0] has value 5 (given)
+    const eliminations = new Map<string, number[]>([['0,0', [5]]]);
+    const result = eliminateCandidates(board, eliminations);
+
+    expect(result.cells[0][0].value).toBe(5);
+    expect(result.cells[0][0].candidates.size).toBe(0);
+  });
+
+  it('removes multiple candidates from multiple cells', () => {
+    const board = createBoard(PUZZLE);
+    const cell1 = board.cells[0][2]; // empty
+    const cell2 = board.cells[0][3]; // empty
+    const c1Candidates = [...cell1.candidates];
+    const c2Candidates = [...cell2.candidates];
+
+    const eliminations = new Map<string, number[]>([
+      ['0,2', [c1Candidates[0]]],
+      ['0,3', [c2Candidates[0]]],
+    ]);
+    const result = eliminateCandidates(board, eliminations);
+
+    expect(result.cells[0][2].candidates.has(c1Candidates[0])).toBe(false);
+    expect(result.cells[0][3].candidates.has(c2Candidates[0])).toBe(false);
   });
 });

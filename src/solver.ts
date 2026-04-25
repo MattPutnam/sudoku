@@ -1,5 +1,5 @@
 import type { Board, SolveStep, SolveResult, Strategy } from './types';
-import { setCellValue } from './board';
+import { setCellValue, eliminateCandidates } from './board';
 import { nakedSingles } from './strategies/nakedSingles';
 import { hiddenSingles } from './strategies/hiddenSingles';
 
@@ -23,6 +23,8 @@ export function solve(board: Board): SolveResult {
             step.valuePlaced.position,
             step.valuePlaced.value,
           );
+        } else if (step.candidatesEliminated.size > 0) {
+          currentBoard = eliminateCandidates(currentBoard, step.candidatesEliminated);
         }
         steps.push(step);
         advanced = true;
