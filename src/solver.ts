@@ -17,6 +17,8 @@ import { xyWing } from './strategies/xyWing';
 import { xyzWing } from './strategies/xyzWing';
 import { wWing } from './strategies/wWing';
 import { uniqueRectangle } from './strategies/uniqueRectangles';
+import { simpleColoring } from './strategies/simpleColoring';
+import { xChains } from './strategies/xChains';
 
 const MAX_ITERATIONS = 1000;
 
@@ -40,6 +42,8 @@ const strategies: Strategy[] = [
   xyzWing,
   wWing,
   uniqueRectangle,
+  simpleColoring,
+  xChains,
 ];
 
 export function solve(board: Board): SolveResult {
