@@ -1,6 +1,6 @@
 import { getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-import { coordsToKey, keyToCP } from '../utils/cellPosition';
+import { coordsToKey, cpToDisplay, keyToCP } from '../utils/cellPosition';
 
 interface ConjugatePair {
   cell1: CellPosition;
@@ -127,7 +127,7 @@ function findColoringElimination(board: Board, digit: number): SolveStep | null 
               candidatesEliminated: eliminations,
               valuePlaced: null,
               reasonCells,
-              explanation: `Simple Coloring on digit ${digit}: two color-${colorLabel} cells (R${posMap.get(group[i])!.row + 1}C${posMap.get(group[i])!.col + 1} and R${posMap.get(group[j])!.row + 1}C${posMap.get(group[j])!.col + 1}) share a unit — color ${colorLabel} is false, eliminating ${digit} from all color-${colorLabel} cells`,
+              explanation: `Simple Coloring on digit ${digit}: two color-${colorLabel} cells (${cpToDisplay(posMap.get(group[i])!)} and ${cpToDisplay(posMap.get(group[j])!)}) share a unit — color ${colorLabel} is false, eliminating ${digit} from all color-${colorLabel} cells`,
             };
           }
         }
@@ -173,7 +173,7 @@ function findColoringElimination(board: Board, digit: number): SolveStep | null 
       candidatesEliminated: eliminations,
       valuePlaced: null,
       reasonCells,
-      explanation: `Simple Coloring on digit ${digit}: uncolored cell(s) ${elimCells.map(c => `R${c.row + 1}C${c.col + 1}`).join(', ')} can see both colors in the chain — eliminating ${digit}`,
+      explanation: `Simple Coloring on digit ${digit}: uncolored cell(s) ${elimCells.map(cpToDisplay).join(', ')} can see both colors in the chain — eliminating ${digit}`,
     };
   }
 

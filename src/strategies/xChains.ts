@@ -1,6 +1,6 @@
 import { getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-import { cpToKey, keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, cpToKey, keyToCP } from '../utils/cellPosition';
 
 function sharesUnit(a: CellPosition, b: CellPosition): boolean {
   if (a.row === b.row) return true;
@@ -137,7 +137,7 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
               candidatesEliminated: eliminations,
               valuePlaced: null,
               reasonCells: chainPositions,
-              explanation: `X-Chain on digit ${digit}: ${state.linkCount}-link chain ${chainPositions.map(p => `R${p.row + 1}C${p.col + 1}`).join('→')} — eliminates ${digit} from ${elimCells.map(c => `R${c.row + 1}C${c.col + 1}`).join(', ')}`,
+              explanation: `X-Chain on digit ${digit}: ${state.linkCount}-link chain ${chainPositions.map(cpToDisplay).join('→')} — eliminates ${digit} from ${elimCells.map(cpToDisplay).join(', ')}`,
             };
           }
         }

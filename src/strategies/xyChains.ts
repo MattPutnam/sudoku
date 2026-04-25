@@ -1,5 +1,5 @@
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-import { cpToKey, keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, cpToKey, keyToCP } from '../utils/cellPosition';
 
 function sharesUnit(a: CellPosition, b: CellPosition): boolean {
   if (a.row === b.row) return true;
@@ -115,7 +115,7 @@ export const xyChains: Strategy = (board: Board): SolveStep | null => {
               candidatesEliminated: eliminations,
               valuePlaced: null,
               reasonCells: chainPositions,
-              explanation: `XY-Chain: ${chainPositions.map(p => `R${p.row + 1}C${p.col + 1}`).join('→')} eliminates ${startDigit} from ${elimCells.map(p => `R${p.row + 1}C${p.col + 1}`).join(', ')}`,
+              explanation: `XY-Chain: ${chainPositions.map(cpToDisplay).join('→')} eliminates ${startDigit} from ${elimCells.map(cpToDisplay).join(', ')}`,
             };
           }
         }

@@ -1,6 +1,6 @@
 import { getBox, getRow, getCol } from '../board';
 import type { Board, SolveStep, Strategy } from '../types';
-import { keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, keyToCP } from '../utils/cellPosition';
 
 export const pointingPairs: Strategy = (board: Board): SolveStep | null => {
   for (let boxIdx = 0; boxIdx < 9; boxIdx++) {
@@ -25,9 +25,7 @@ export const pointingPairs: Strategy = (board: Board): SolveStep | null => {
           }
         }
         if (eliminations.size > 0) {
-          const cellList = cells
-            .map((c) => `R${c.row + 1}C${c.col + 1}`)
-            .join(', ');
+          const cellList = cells.map(cpToDisplay).join(', ');
           return {
             strategy: 'Pointing Pair',
             cellsAffected: [...eliminations.keys()].map(keyToCP),
@@ -49,9 +47,7 @@ export const pointingPairs: Strategy = (board: Board): SolveStep | null => {
           }
         }
         if (eliminations.size > 0) {
-          const cellList = cells
-            .map((c) => `R${c.row + 1}C${c.col + 1}`)
-            .join(', ');
+          const cellList = cells.map(cpToDisplay).join(', ');
           return {
             strategy: 'Pointing Pair',
             cellsAffected: [...eliminations.keys()].map(keyToCP),

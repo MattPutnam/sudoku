@@ -1,6 +1,6 @@
 import { getRow, getCol, getBox, type GroupType } from '../board';
 import type { Board, Cell, SolveStep, Strategy } from '../types';
-import { keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, keyToCP } from '../utils/cellPosition';
 
 function combinations(items: Cell[], size: number): Cell[][] {
   const result: Cell[][] = [];
@@ -56,7 +56,7 @@ export function findNakedSubset(
     const strategyNames: Record<number, string> = { 2: 'Naked Pair', 3: 'Naked Triple', 4: 'Naked Quad' };
     const strategyName = strategyNames[size] ?? `Naked Subset (${size})`;
     const digits = [...union].sort().join(', ');
-    const cellList = combo.map((c) => `R${c.row + 1}C${c.col + 1}`).join(', ');
+    const cellList = combo.map(cpToDisplay).join(', ');
 
     return {
       strategy: strategyName,

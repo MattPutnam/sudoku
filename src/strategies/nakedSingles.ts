@@ -1,4 +1,5 @@
 import type { Board, SolveStep, Strategy } from '../types';
+import { coordsToDisplay } from '../utils/cellPosition';
 
 export const nakedSingles: Strategy = (board: Board): SolveStep | null => {
   for (let row = 0; row < 9; row++) {
@@ -14,7 +15,7 @@ export const nakedSingles: Strategy = (board: Board): SolveStep | null => {
         candidatesEliminated: new Map(),
         valuePlaced: { position: { row, col }, value },
         reasonCells: [{ row, col }],
-        explanation: `Cell R${row + 1}C${col + 1} has only one candidate: ${value}`,
+        explanation: `Cell ${coordsToDisplay(row, col)} has only one candidate: ${value}`,
       };
     }
   }

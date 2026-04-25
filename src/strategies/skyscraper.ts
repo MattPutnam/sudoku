@@ -1,6 +1,6 @@
 import { getPeers } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-import { keyToCoords, keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const skyscraper: Strategy = (board: Board): SolveStep | null => {
   for (let digit = 1; digit <= 9; digit++) {
@@ -79,7 +79,7 @@ function findSkyscraper(
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells,
-          explanation: `Skyscraper: ${orientation === 'row' ? 'rows' : 'columns'} ${pairA.line + 1} and ${pairB.line + 1} share ${orientation === 'row' ? 'column' : 'row'} ${conn.baseA[sharedAxis] + 1} as base, tops R${conn.topA.row + 1}C${conn.topA.col + 1} and R${conn.topB.row + 1}C${conn.topB.col + 1} — eliminates ${digit}`,
+          explanation: `Skyscraper: ${orientation === 'row' ? 'rows' : 'columns'} ${pairA.line + 1} and ${pairB.line + 1} share ${orientation === 'row' ? 'column' : 'row'} ${conn.baseA[sharedAxis] + 1} as base, tops ${cpToDisplay(conn.topA)} and ${cpToDisplay(conn.topB)} — eliminates ${digit}`,
         };
       }
     }

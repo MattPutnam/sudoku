@@ -1,4 +1,5 @@
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { coordsToDisplay, cpToDisplay } from '../utils/cellPosition';
 
 export const uniqueRectangle: Strategy = (board: Board): SolveStep | null => {
   const bivCells: CellPosition[] = [];
@@ -63,7 +64,7 @@ export const uniqueRectangle: Strategy = (board: Board): SolveStep | null => {
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells: corners,
-          explanation: `Unique Rectangle: corners R${r1 + 1}C${c1 + 1}, R${r1 + 1}C${c2 + 1}, R${r2 + 1}C${c1 + 1}, R${r2 + 1}C${c2 + 1} with pair {${valA},${valB}} — eliminates ${valA},${valB} from R${fourthCorner.row + 1}C${fourthCorner.col + 1} to avoid deadly pattern`,
+          explanation: `Unique Rectangle: corners ${coordsToDisplay(r1, c1)}, ${coordsToDisplay(r1, c2)}, ${coordsToDisplay(r2, c1)}, ${coordsToDisplay(r2, c2)} with pair {${valA},${valB}} — eliminates ${valA},${valB} from ${cpToDisplay(fourthCorner)} to avoid deadly pattern`,
         };
       }
     }

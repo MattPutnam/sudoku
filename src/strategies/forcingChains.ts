@@ -1,5 +1,6 @@
 import { clone, setCellValue, getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { coordsToDisplay } from '../utils/cellPosition';
 
 const MAX_PROPAGATION = 50;
 
@@ -8,7 +9,7 @@ function hasContradiction(board: Board): { found: boolean; detail: string } {
     for (let c = 0; c < 9; c++) {
       const cell = board.cells[r][c];
       if (cell.value === null && cell.candidates.size === 0) {
-        return { found: true, detail: `R${r + 1}C${c + 1} has no candidates` };
+        return { found: true, detail: `${coordsToDisplay(r, c)} has no candidates` };
       }
     }
   }
@@ -146,7 +147,7 @@ export const forcingChains: Strategy = (board: Board): SolveStep | null => {
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells: [{ row, col }],
-          explanation: `Forcing Chains: assuming ${digit} at R${row + 1}C${col + 1} leads to contradiction (${result.contradiction}) — ${digit} eliminated`,
+          explanation: `Forcing Chains: assuming ${digit} at ${coordsToDisplay(row, col)} leads to contradiction (${result.contradiction}) — ${digit} eliminated`,
         };
       }
     }

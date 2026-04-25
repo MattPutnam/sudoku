@@ -1,6 +1,6 @@
 import { findAllALS, type ALS } from './alsXZ';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-import { cpToKey, keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, cpToKey, keyToCP } from '../utils/cellPosition';
 
 function sharesUnit(a: CellPosition, b: CellPosition): boolean {
   if (a.row === b.row) return true;
@@ -106,7 +106,7 @@ export const alsXYWing: Strategy = (board: Board): SolveStep | null => {
                 const elimCells = [...eliminations.keys()].map(keyToCP);
 
                 const fmtCells = (cells: CellPosition[]) =>
-                  cells.map(cl => `R${cl.row + 1}C${cl.col + 1}`).join(',');
+                  cells.map(cpToDisplay).join(',');
                 const fmtDigits = (s: Set<number>) => [...s].sort().join(',');
 
                 return {

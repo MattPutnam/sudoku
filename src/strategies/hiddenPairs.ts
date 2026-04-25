@@ -1,5 +1,6 @@
 import { getRow, getCol, getBox, type GroupType } from '../board';
 import type { Board, Cell, SolveStep, Strategy } from '../types';
+import { cpToDisplay } from '../utils/cellPosition';
 
 function combinations(items: number[], size: number): number[][] {
   const result: number[][] = [];
@@ -67,7 +68,7 @@ export function findHiddenSubset(
     const strategyName = strategyNames[size] ?? `Hidden Subset (${size})`;
     const digits = combo.sort((a, b) => a - b).join(', ');
     const subsetCells = [...cellUnion.values()];
-    const cellList = subsetCells.map((c) => `R${c.row + 1}C${c.col + 1}`).join(', ');
+    const cellList = subsetCells.map(cpToDisplay).join(', ');
 
     return {
       strategy: strategyName,

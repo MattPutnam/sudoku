@@ -1,6 +1,6 @@
 import { getPeers, getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-import { keyToCoords, keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const wWing: Strategy = (board: Board): SolveStep | null => {
   const bivCells: CellPosition[] = [];
@@ -69,7 +69,7 @@ export const wWing: Strategy = (board: Board): SolveStep | null => {
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells,
-          explanation: `W-Wing: bivalue cells R${c1.row + 1}C${c1.col + 1} and R${c2.row + 1}C${c2.col + 1} {${valA},${valB}}, strong link on ${linkDigit} via R${link.end1.row + 1}C${link.end1.col + 1}-R${link.end2.row + 1}C${link.end2.col + 1} — eliminates ${elimDigit}`,
+          explanation: `W-Wing: bivalue cells ${cpToDisplay(c1)} and ${cpToDisplay(c2)} {${valA},${valB}}, strong link on ${linkDigit} via ${cpToDisplay(link.end1)}-${cpToDisplay(link.end2)} — eliminates ${elimDigit}`,
         };
       }
     }

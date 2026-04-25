@@ -1,6 +1,6 @@
 import { getPeers } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-import { keyToCoords, keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const xyWing: Strategy = (board: Board): SolveStep | null => {
   const bivCells: CellPosition[] = [];
@@ -65,7 +65,7 @@ export const xyWing: Strategy = (board: Board): SolveStep | null => {
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells: [pivot, p1, p2],
-          explanation: `XY-Wing: pivot R${pivot.row + 1}C${pivot.col + 1} {${a},${b}}, pincers R${p1.row + 1}C${p1.col + 1} {${a},${cVal}} and R${p2.row + 1}C${p2.col + 1} {${b},${cVal}} — eliminates ${cVal}`,
+          explanation: `XY-Wing: pivot ${cpToDisplay(pivot)} {${a},${b}}, pincers ${cpToDisplay(p1)} {${a},${cVal}} and ${cpToDisplay(p2)} {${b},${cVal}} — eliminates ${cVal}`,
         };
       }
     }

@@ -18,3 +18,11 @@ export const keyToCP = (cellPositionString: string): CellPosition => {
   const [row, col] = keyToCoords(cellPositionString);
   return { row, col };
 };
+
+export const cpToDisplay = (cellPosition: CellPosition): string => {
+  return `R${cellPosition.row + 1}C${cellPosition.col + 1}`;
+};
+
+export const coordsToDisplay = (row: number, col: number): string => {
+  return `R${row + 1}C${col + 1}`;
+}

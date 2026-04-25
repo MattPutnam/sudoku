@@ -1,6 +1,6 @@
 import { getPeers } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-import { keyToCoords, keyToCP } from '../utils/cellPosition';
+import { cpToDisplay, keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const twoStringKite: Strategy = (board: Board): SolveStep | null => {
   for (let digit = 1; digit <= 9; digit++) {
@@ -73,7 +73,7 @@ export const twoStringKite: Strategy = (board: Board): SolveStep | null => {
             candidatesEliminated: eliminations,
             valuePlaced: null,
             reasonCells,
-            explanation: `2-String Kite: row ${rp.row + 1} pair and column ${cp.col + 1} pair connected through box ${box1 + 1}, loose ends R${conn.loose1.row + 1}C${conn.loose1.col + 1} and R${conn.loose2.row + 1}C${conn.loose2.col + 1} — eliminates ${digit}`,
+            explanation: `2-String Kite: row ${rp.row + 1} pair and column ${cp.col + 1} pair connected through box ${box1 + 1}, loose ends ${cpToDisplay(conn.loose1)} and ${cpToDisplay(conn.loose2)} — eliminates ${digit}`,
           };
         }
       }
