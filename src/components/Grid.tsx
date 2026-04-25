@@ -48,9 +48,13 @@ function detectConflicts(board: Board): Set<string> {
   return conflicts;
 }
 
-export function Grid() {
+interface GridProps {
+  initialPuzzle?: string;
+}
+
+export function Grid({ initialPuzzle = '0'.repeat(81) }: GridProps) {
   const [board, setBoard] = useState<Board>(() =>
-    createBoard('0'.repeat(81))
+    createBoard(initialPuzzle)
   );
   const [selectedPos, setSelectedPos] = useState<CellPosition | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
