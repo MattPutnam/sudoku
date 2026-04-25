@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard } from '../board';
-import { alsXZ } from '../strategies/alsXZ';
 import { alsXYWing } from '../strategies/alsXYWing';
+import { alsXZ } from '../strategies/alsXZ';
 import { findAllALS } from '../strategies/alsXZ';
 import type { Board } from '../types';
 

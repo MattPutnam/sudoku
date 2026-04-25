@@ -1,5 +1,5 @@
-import type { Board, SolveStep } from '../types';
 import { setCellValue, eliminateCandidates } from '../board';
+import type { Board, SolveStep } from '../types';
 
 export function buildSnapshots(initialBoard: Board, steps: SolveStep[]): Board[] {
   const snapshots: Board[] = [initialBoard];

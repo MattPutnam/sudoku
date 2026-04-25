@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard } from '../board';
-import { forcingChains } from '../strategies/forcingChains';
 import { solve } from '../solver';
+import { forcingChains } from '../strategies/forcingChains';
 import type { Board } from '../types';
 
 function emptyBoard(): Board {
@@ -136,7 +137,7 @@ describe('forcingChains', () => {
       '000000001000003000020500400000000520004070100087000000500200030300010000100800000',
     );
     const result = solve(board);
-    const usedStrategies = result.steps.map((s: any) => s.strategy);
+    const usedStrategies = result.steps.map(s => s.strategy);
     expect(usedStrategies).toContain('Forcing Chains');
   });
 });

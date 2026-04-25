@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard } from '../board';
 import { xChains } from '../strategies/xChains';
 import type { Board } from '../types';

@@ -1,5 +1,5 @@
-import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 import { getPeers } from '../board';
+import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 
 export const xyzWing: Strategy = (board: Board): SolveStep | null => {
   for (let r = 0; r < 9; r++) {

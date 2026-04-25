@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard } from '../board';
 import { twoStringKite } from '../strategies/twoStringKite';
 import type { Board } from '../types';

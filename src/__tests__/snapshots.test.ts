@@ -1,8 +1,10 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard } from '../board';
 import { solve } from '../solver';
-import { buildSnapshots } from '../utils/snapshots';
 import type { SolveStep } from '../types';
+import { buildSnapshots } from '../utils/snapshots';
+
 
 const EXAMPLE_PUZZLE =
   '530070000600195000098000060800060003400803001700020006060000280000419005000080079';

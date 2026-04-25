@@ -1,5 +1,7 @@
-import type { Cell as CellType } from '../types';
+import cx from 'classnames';
+
 import styles from './Cell.module.css';
+import type { Cell as CellType } from '../types';
 
 interface CellProps {
   cell: CellType;
@@ -10,15 +12,13 @@ interface CellProps {
 }
 
 export function Cell({ cell, isSelected, isConflict, className, onClick }: CellProps) {
-  const classNames = [
+  const classNames = cx(
     styles.cell,
     isSelected && styles.selected,
     isConflict && styles.conflict,
     cell.isGiven && styles.given,
     className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+  );
 
   return (
     <div className={classNames} tabIndex={-1} onClick={onClick}>

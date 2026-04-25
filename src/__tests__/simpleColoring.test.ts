@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard } from '../board';
 import { simpleColoring } from '../strategies/simpleColoring';
 import type { Board } from '../types';

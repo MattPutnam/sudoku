@@ -1,7 +1,9 @@
+import cx from 'classnames';
 import { useMemo } from 'react';
-import type { Board, SolveStep } from '../types';
+
 import PlaybackCell from './PlaybackCell';
 import styles from './PlaybackGrid.module.css';
+import type { Board, SolveStep } from '../types';
 
 interface PlaybackGridProps {
   board: Board;
@@ -41,12 +43,10 @@ export default function PlaybackGrid({ board, currentStep }: PlaybackGridProps) 
           const isElimination = isAffected && key !== placementKey;
           const eliminatedCandidates = eliminatedMap.get(key) ?? [];
 
-          const boxClasses = [
-            c % 3 === 0 && c !== 0 ? styles.boxLeft : '',
-            r % 3 === 0 && r !== 0 ? styles.boxTop : '',
-          ]
-            .filter(Boolean)
-            .join(' ');
+          const boxClasses = cx(
+            c % 3 === 0 && c !== 0 && styles.boxLeft,
+            r % 3 === 0 && r !== 0 && styles.boxTop,
+          );
 
           return (
             <PlaybackCell
@@ -56,7 +56,7 @@ export default function PlaybackGrid({ board, currentStep }: PlaybackGridProps) 
               isAffected={isAffected}
               isElimination={isElimination}
               eliminatedCandidates={eliminatedCandidates}
-              className={boxClasses || undefined}
+              className={boxClasses}
             />
           );
         }),

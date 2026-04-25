@@ -1,5 +1,5 @@
-import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 import { findAllALS, type ALS } from './alsXZ';
+import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 
 const key = (p: CellPosition) => `${p.row},${p.col}`;
 

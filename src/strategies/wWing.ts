@@ -1,5 +1,5 @@
-import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 import { getPeers, getRow, getCol, getBox } from '../board';
+import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 
 export const wWing: Strategy = (board: Board): SolveStep | null => {
   const bivCells: CellPosition[] = [];

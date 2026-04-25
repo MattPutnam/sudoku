@@ -1,6 +1,8 @@
+import cx from 'classnames';
 import { useAnimateOnChange, Easings } from 're-animate-js';
-import type { Cell } from '../types';
+
 import styles from './PlaybackCell.module.css';
+import type { Cell } from '../types';
 
 interface PlaybackCellProps {
   cell: Cell;
@@ -29,7 +31,7 @@ function AnimatedCandidate({
 
   return (
     <span
-      className={`${styles.candidate}${isEliminating ? ` ${styles.eliminating}` : ''}`}
+      className={cx(styles.candidate, isEliminating && styles.eliminating)}
       style={{ opacity }}
     >
       {digit}
@@ -54,16 +56,14 @@ export default function PlaybackCell({
     { durationMs: 400, easingFunction: Easings.back.out },
   );
 
-  const cellClasses = [
+  const cellClasses = cx(
     styles.cell,
-    isReason ? styles.reason : '',
-    isAffected && !isElimination ? styles.affected : '',
-    isAffected && isElimination ? styles.affectedElimination : '',
-    cell.isGiven ? styles.given : '',
-    className ?? '',
-  ]
-    .filter(Boolean)
-    .join(' ');
+    isReason && styles.reason,
+    isAffected && !isElimination && styles.affected,
+    isAffected && isElimination && styles.affectedElimination,
+    cell.isGiven && styles.given,
+    className,
+  );
 
   const eliminatedSet = new Set(eliminatedCandidates);
 

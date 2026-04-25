@@ -1,3 +1,4 @@
+import { Button } from './Button';
 import styles from './PlaybackControls.module.css';
 
 interface PlaybackControlsProps {
@@ -31,45 +32,41 @@ export function PlaybackControls({
 
   return (
     <div className={styles.bar}>
-      <button
-        className={styles.button}
+      <Button
+        compact
         onClick={onStepBackward}
         disabled={isAtStart}
         aria-label="Step backward"
-        title="Step backward"
       >
         |◀
-      </button>
+      </Button>
 
-      <button
-        className={styles.button}
+      <Button
+        compact
         onClick={isPlaying ? onPause : onPlay}
         disabled={isAtEnd && !isPlaying}
         aria-label={isPlaying ? 'Pause' : 'Play'}
-        title={isPlaying ? 'Pause' : 'Play'}
       >
         {isPlaying ? '⏸' : '▶'}
-      </button>
+      </Button>
 
-      <button
-        className={styles.button}
+      <Button
+        compact
         onClick={onStepForward}
         disabled={isAtEnd}
         aria-label="Step forward"
-        title="Step forward"
       >
         ▶|
-      </button>
+      </Button>
 
-      <button
-        className={styles.button}
+      <Button
+        compact
         onClick={onReset}
         disabled={isAtStart}
         aria-label="Reset"
-        title="Reset"
       >
         ↺
-      </button>
+      </Button>
 
       <span className={styles.counter}>{stepLabel}</span>
     </div>

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard, getRow, getCol, getBox } from '../board';
 import { hiddenSingles } from '../strategies/hiddenSingles';
 import type { Board } from '../types';

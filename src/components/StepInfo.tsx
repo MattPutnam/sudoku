@@ -1,5 +1,5 @@
-import type { SolveStep } from '../types';
 import styles from './StepInfo.module.css';
+import type { SolveStep } from '../types';
 
 interface StepInfoProps {
   step: SolveStep | null;

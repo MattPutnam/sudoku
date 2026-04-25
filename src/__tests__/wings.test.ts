@@ -1,8 +1,9 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard } from '../board';
+import { wWing } from '../strategies/wWing';
 import { xyWing } from '../strategies/xyWing';
 import { xyzWing } from '../strategies/xyzWing';
-import { wWing } from '../strategies/wWing';
 import type { Board } from '../types';
 
 function setBoardCandidates(board: Board, overrides: Record<string, number[]>): Board {

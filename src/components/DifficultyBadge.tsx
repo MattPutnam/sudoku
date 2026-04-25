@@ -1,3 +1,5 @@
+import cx from 'classnames';
+
 import styles from './DifficultyBadge.module.css';
 
 interface DifficultyBadgeProps {
@@ -22,7 +24,7 @@ export function DifficultyBadge({ difficulty, isComplete }: DifficultyBadgeProps
   const colorClass = colorKey ? styles[colorKey] : '';
 
   return (
-    <span className={`${styles.badge} ${colorClass}`}>
+    <span className={cx(styles.badge, colorClass)}>
       Difficulty: {difficulty.label}
     </span>
   );

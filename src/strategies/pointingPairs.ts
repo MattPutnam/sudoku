@@ -1,5 +1,5 @@
-import type { Board, SolveStep, Strategy } from '../types';
 import { getBox, getRow, getCol } from '../board';
+import type { Board, SolveStep, Strategy } from '../types';
 
 export const pointingPairs: Strategy = (board: Board): SolveStep | null => {
   for (let boxIdx = 0; boxIdx < 9; boxIdx++) {

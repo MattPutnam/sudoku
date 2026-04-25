@@ -1,5 +1,5 @@
-import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 import { getRow, getCol, getBox } from '../board';
+import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 
 interface ConjugatePair {
   cell1: CellPosition;

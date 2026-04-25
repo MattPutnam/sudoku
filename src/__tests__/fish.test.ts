@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { createBoard } from '../board';
 import { xWing, swordfish, jellyfish } from '../strategies/fish';
 import type { Board } from '../types';

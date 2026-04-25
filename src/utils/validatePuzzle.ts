@@ -1,5 +1,5 @@
-import type { Board } from '../types';
 import { getRow, getCol, getBox } from '../board';
+import type { Board } from '../types';
 
 export type ValidationStatus =
   | 'valid'

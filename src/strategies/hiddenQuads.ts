@@ -1,6 +1,6 @@
-import type { Board, SolveStep, Strategy } from '../types';
 import { getRow, getCol, getBox } from '../board';
 import { findHiddenSubset } from './hiddenPairs';
+import type { Board, SolveStep, Strategy } from '../types';
 
 export const hiddenQuads: Strategy = (board: Board): SolveStep | null => {
   for (let i = 0; i < 9; i++) {

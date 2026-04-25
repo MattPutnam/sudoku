@@ -1,5 +1,5 @@
-import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 import { getPeers } from '../board';
+import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 
 export const xyWing: Strategy = (board: Board): SolveStep | null => {
   const bivCells: CellPosition[] = [];

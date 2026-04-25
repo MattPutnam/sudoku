@@ -1,5 +1,5 @@
-import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 import { clone, setCellValue, getRow, getCol, getBox } from '../board';
+import type { Board, SolveStep, Strategy, CellPosition } from '../types';
 
 const MAX_PROPAGATION = 50;
 

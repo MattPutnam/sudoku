@@ -1,5 +1,5 @@
-import type { Board, SolveStep, Strategy } from '../types';
 import { getRow, getCol, getBox } from '../board';
+import type { Board, SolveStep, Strategy } from '../types';
 
 export const claiming: Strategy = (board: Board): SolveStep | null => {
   // Check rows: if all candidates for a digit in a row fall in one box, eliminate from rest of box

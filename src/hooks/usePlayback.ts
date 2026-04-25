@@ -1,7 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+
 import type { Board, SolveResult, SolveStep } from '../types';
-import { buildSnapshots } from '../utils/snapshots';
 import { assessDifficulty } from '../utils/difficulty';
+import { buildSnapshots } from '../utils/snapshots';
+
 
 type PlaybackMode = 'idle' | 'playing' | 'paused';
 

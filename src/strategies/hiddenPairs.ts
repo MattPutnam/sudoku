@@ -1,5 +1,5 @@
-import type { Board, Cell, SolveStep, Strategy } from '../types';
 import { getRow, getCol, getBox } from '../board';
+import type { Board, Cell, SolveStep, Strategy } from '../types';
 
 type GroupType = 'row' | 'column' | 'box';
 

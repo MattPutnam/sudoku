@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import type { Board } from './types';
-import { Grid } from './components/Grid';
-import PlaybackGrid from './components/PlaybackGrid';
-import { PlaybackControls } from './components/PlaybackControls';
-import { StepInfo } from './components/StepInfo';
+
+import styles from './App.module.css';
+import { Button } from './components/Button';
 import { DifficultyBadge } from './components/DifficultyBadge';
+import { Grid } from './components/Grid';
+import { PlaybackControls } from './components/PlaybackControls';
+import PlaybackGrid from './components/PlaybackGrid';
+import { StepInfo } from './components/StepInfo';
 import { usePlayback } from './hooks/usePlayback';
 import { solve } from './solver';
+import type { Board } from './types';
 import { validatePuzzle } from './utils/validatePuzzle';
-import styles from './App.module.css';
+
 
 const EXAMPLE_PUZZLE =
   '530070000600195000098000060800060003400803001700020006060000280000419005000080079';
@@ -52,26 +55,20 @@ function App() {
       {appMode === 'input' && (
         <>
           <div className={styles.controls}>
-            <button
-              className={styles.button}
-              onClick={() => loadPuzzle(EXAMPLE_PUZZLE)}
-            >
+            <Button onClick={() => loadPuzzle(EXAMPLE_PUZZLE)}>
               Load Example Puzzle
-            </button>
-            <button
-              className={styles.button}
-              onClick={() => loadPuzzle(EMPTY_PUZZLE)}
-            >
+            </Button>
+            <Button onClick={() => loadPuzzle(EMPTY_PUZZLE)}>
               Clear
-            </button>
-            <button
-              className={`${styles.button} ${styles.solveButton}`}
+            </Button>
+            <Button
+              variant="primary"
               onClick={handleSolve}
               disabled={!canSolve}
-              title={!canSolve && validation ? validation.message : undefined}
+              tooltip={!canSolve && validation ? validation.message : undefined}
             >
               Solve
-            </button>
+            </Button>
           </div>
           <Grid key={boardKey} initialPuzzle={puzzle} onBoardChange={setCurrentBoard} />
         </>
@@ -102,9 +99,9 @@ function App() {
             difficulty={playback.difficulty}
             isComplete={solveComplete}
           />
-          <button className={styles.button} onClick={handleBackToInput}>
+          <Button onClick={handleBackToInput}>
             Back to Input
-          </button>
+          </Button>
         </div>
       )}
     </div>

@@ -1,6 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { assessDifficulty, STRATEGY_TIERS } from '../utils/difficulty';
+
 import type { SolveStep } from '../types';
+import { assessDifficulty, STRATEGY_TIERS } from '../utils/difficulty';
+
 
 function makeStep(strategy: string): SolveStep {
   return {

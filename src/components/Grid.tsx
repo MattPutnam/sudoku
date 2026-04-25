@@ -1,8 +1,10 @@
+import cx from 'classnames';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Board, CellPosition } from '../types';
+
 import { createBoard, setCellValue } from '../board';
 import { Cell } from './Cell';
 import styles from './Grid.module.css';
+import type { Board, CellPosition } from '../types';
 
 function posKey(row: number, col: number): string {
   return `${row}-${col}`;
@@ -127,12 +129,10 @@ export function Grid({ initialPuzzle = '0'.repeat(81), onBoardChange }: GridProp
       {board.cells.map((row, rowIdx) =>
         row.map((cell, colIdx) => {
           const key = posKey(rowIdx, colIdx);
-          const extraClasses = [
+          const extraClasses = cx(
             colIdx % 3 === 0 && colIdx !== 0 && styles.boxLeft,
             rowIdx % 3 === 0 && rowIdx !== 0 && styles.boxTop,
-          ]
-            .filter(Boolean)
-            .join(' ');
+          );
 
           return (
             <Cell
@@ -144,7 +144,7 @@ export function Grid({ initialPuzzle = '0'.repeat(81), onBoardChange }: GridProp
                 selectedPos.col === colIdx
               }
               isConflict={conflicts.has(key)}
-              className={extraClasses || undefined}
+              className={extraClasses}
               onClick={() => handleCellClick(rowIdx, colIdx)}
             />
           );
