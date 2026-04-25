@@ -1,29 +1,31 @@
 .container {
   max-width: 542px;
   text-align: left;
-  margin-top: 12px;
+  margin-top: var(--space-sm);
+  border-top: 1px solid var(--color-border-light);
+  padding-top: var(--space-md);
 }
 
 .prompt {
-  font-size: 14px;
-  color: #888;
+  font-size: var(--font-size-base);
+  color: var(--color-text-muted);
   margin: 0;
 }
 
 .strategy {
   display: inline-block;
-  font-size: 13px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
-  color: #1a1a2e;
-  background: #eef0f5;
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-primary) 8%, white);
   padding: 2px 10px;
-  border-radius: 4px;
-  margin-bottom: 4px;
+  border-radius: var(--border-radius);
+  margin-bottom: var(--space-xs);
 }
 
 .explanation {
-  font-size: 14px;
-  color: #444;
-  margin: 4px 0 0;
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  margin: var(--space-xs) 0 0;
   line-height: 1.4;
 }

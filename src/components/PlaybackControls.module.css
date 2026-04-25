@@ -1,19 +1,19 @@
 .bar {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-sm);
   justify-content: center;
-  margin-top: 16px;
+  margin-top: var(--space-md);
 }
 
 .button {
-  padding: 8px 16px;
-  font-size: 14px;
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-size-base);
   font-family: inherit;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background: #f5f5f5;
-  color: #333;
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--border-radius);
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
   min-width: 40px;
@@ -29,13 +29,14 @@
 }
 
 .button:disabled {
-  opacity: 0.4;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 
 .counter {
-  font-size: 13px;
-  color: #666;
-  margin-left: 8px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-left: var(--space-sm);
   min-width: 100px;
+  font-variant-numeric: tabular-nums;
 }
