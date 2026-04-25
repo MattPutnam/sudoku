@@ -107,16 +107,24 @@ export function setCellValue(
     throw new Error(`Invalid cell value: ${value}. Must be 1-9 or null.`);
   }
 
-  const newCells = board.cells.map((row) =>
-    row.map((c) => ({ ...c, candidates: new Set(c.candidates) }))
-  );
-  newCells[pos.row][pos.col] = {
-    ...newCells[pos.row][pos.col],
+  const newBoard = clone(board);
+  newBoard.cells[pos.row][pos.col] = {
+    ...newBoard.cells[pos.row][pos.col],
     value,
     candidates: new Set<number>(),
   };
 
-  return computeCandidates({ cells: newCells });
+  if (value === null) {
+    return computeCandidates(newBoard);
+  }
+
+  for (const peer of getPeers(newBoard, pos)) {
+    if (peer.value === null) {
+      newBoard.cells[peer.row][peer.col].candidates.delete(value);
+    }
+  }
+
+  return newBoard;
 }
 
 export function clone(board: Board): Board {
