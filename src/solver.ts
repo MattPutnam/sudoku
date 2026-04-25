@@ -19,6 +19,7 @@ import { wWing } from './strategies/wWing';
 import { uniqueRectangle } from './strategies/uniqueRectangles';
 import { simpleColoring } from './strategies/simpleColoring';
 import { xChains } from './strategies/xChains';
+import { xyChains } from './strategies/xyChains';
 
 const MAX_ITERATIONS = 1000;
 
@@ -44,6 +45,7 @@ const strategies: Strategy[] = [
   uniqueRectangle,
   simpleColoring,
   xChains,
+  xyChains,
 ];
 
 export function solve(board: Board): SolveResult {
