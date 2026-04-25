@@ -72,19 +72,69 @@ describe('solve', () => {
     expect(result.complete).toBe(true);
   });
 
-  it('every step has a valid valuePlaced position and value', () => {
+  it('every step has either a valid valuePlaced or non-empty candidatesEliminated', () => {
     const board = createBoard(EASY_PUZZLE);
     const result = solve(board);
 
     for (const step of result.steps) {
-      expect(step.valuePlaced).not.toBeNull();
-      const { position, value } = step.valuePlaced!;
-      expect(position.row).toBeGreaterThanOrEqual(0);
-      expect(position.row).toBeLessThanOrEqual(8);
-      expect(position.col).toBeGreaterThanOrEqual(0);
-      expect(position.col).toBeLessThanOrEqual(8);
-      expect(value).toBeGreaterThanOrEqual(1);
-      expect(value).toBeLessThanOrEqual(9);
+      if (step.valuePlaced !== null) {
+        const { position, value } = step.valuePlaced;
+        expect(position.row).toBeGreaterThanOrEqual(0);
+        expect(position.row).toBeLessThanOrEqual(8);
+        expect(position.col).toBeGreaterThanOrEqual(0);
+        expect(position.col).toBeLessThanOrEqual(8);
+        expect(value).toBeGreaterThanOrEqual(1);
+        expect(value).toBeLessThanOrEqual(9);
+      } else {
+        expect(step.candidatesEliminated.size).toBeGreaterThan(0);
+      }
+    }
+  });
+});
+
+// Medium puzzle that requires Tier 2 strategies (Pointing Pair) to solve completely
+const MEDIUM_PUZZLE =
+  '850002400720000009004000000000107002305000900040000000000080070017000000000036040';
+
+describe('solve — medium puzzle', () => {
+  it('solves the medium puzzle completely', () => {
+    const board = createBoard(MEDIUM_PUZZLE);
+    const result = solve(board);
+
+    expect(result.complete).toBe(true);
+  });
+
+  it('uses at least one Tier 2 strategy', () => {
+    const board = createBoard(MEDIUM_PUZZLE);
+    const result = solve(board);
+
+    const tier2Names = new Set([
+      'Naked Pair',
+      'Hidden Pair',
+      'Naked Triple',
+      'Hidden Triple',
+      'Naked Quad',
+      'Hidden Quad',
+      'Pointing Pair',
+      'Claiming',
+    ]);
+    const usedStrategies = result.steps.map((s) => s.strategy);
+    const hasTier2 = usedStrategies.some((name) => tier2Names.has(name));
+
+    expect(hasTier2).toBe(true);
+  });
+
+  it('every step has either valuePlaced or non-empty candidatesEliminated', () => {
+    const board = createBoard(MEDIUM_PUZZLE);
+    const result = solve(board);
+
+    for (const step of result.steps) {
+      if (step.valuePlaced !== null) {
+        expect(step.valuePlaced.value).toBeGreaterThanOrEqual(1);
+        expect(step.valuePlaced.value).toBeLessThanOrEqual(9);
+      } else {
+        expect(step.candidatesEliminated.size).toBeGreaterThan(0);
+      }
     }
   });
 });

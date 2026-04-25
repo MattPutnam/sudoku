@@ -2,10 +2,29 @@ import type { Board, SolveStep, SolveResult, Strategy } from './types';
 import { setCellValue, eliminateCandidates } from './board';
 import { nakedSingles } from './strategies/nakedSingles';
 import { hiddenSingles } from './strategies/hiddenSingles';
+import { pointingPairs } from './strategies/pointingPairs';
+import { claiming } from './strategies/claiming';
+import { nakedPairs } from './strategies/nakedPairs';
+import { hiddenPairs } from './strategies/hiddenPairs';
+import { nakedTriples } from './strategies/nakedTriples';
+import { hiddenTriples } from './strategies/hiddenTriples';
+import { nakedQuads } from './strategies/nakedQuads';
+import { hiddenQuads } from './strategies/hiddenQuads';
 
 const MAX_ITERATIONS = 1000;
 
-const strategies: Strategy[] = [nakedSingles, hiddenSingles];
+const strategies: Strategy[] = [
+  nakedSingles,
+  hiddenSingles,
+  pointingPairs,
+  claiming,
+  nakedPairs,
+  hiddenPairs,
+  nakedTriples,
+  hiddenTriples,
+  nakedQuads,
+  hiddenQuads,
+];
 
 export function solve(board: Board): SolveResult {
   const steps: SolveStep[] = [];
