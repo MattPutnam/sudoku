@@ -1,22 +1,24 @@
 .cell {
-  width: 60px;
-  height: 60px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  background: #fff;
+  background: var(--color-surface);
   box-sizing: border-box;
   user-select: none;
+  transition: background 0.2s ease;
 }
 
 .given {
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--color-text);
 }
 
 .value {
-  font-size: 28px;
+  font-size: var(--font-size-digit);
+  font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
@@ -30,24 +32,24 @@
 }
 
 .candidate {
-  font-size: 11px;
-  color: #668;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
   line-height: 1;
 }
 
 .reason {
-  background: rgba(66, 165, 245, 0.15);
-  box-shadow: inset 0 0 0 2px rgba(66, 165, 245, 0.5);
+  background: var(--color-reason);
+  box-shadow: inset 0 0 0 2px var(--color-reason-ring);
 }
 
 .affected {
-  background: rgba(76, 175, 80, 0.2);
+  background: var(--color-affected);
 }
 
 .affectedElimination {
-  background: rgba(255, 152, 0, 0.15);
+  background: var(--color-elimination);
 }
 
 .eliminating {
-  color: #e53935;
+  color: var(--color-eliminating-text);
 }

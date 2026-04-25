@@ -1,35 +1,37 @@
 .cell {
-  width: 60px;
-  height: 60px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   position: relative;
-  background: #fff;
+  background: var(--color-surface);
   box-sizing: border-box;
   user-select: none;
+  transition: background 0.15s ease;
 }
 
 .selected {
-  background: #d0e4ff;
+  background: var(--color-selected);
 }
 
 .conflict {
-  background: #fdd;
+  background: var(--color-conflict);
 }
 
 .conflict.selected {
-  background: #f0c0d0;
+  background: var(--color-conflict-selected);
 }
 
 .given {
   font-weight: 700;
-  color: #1a1a2e;
+  color: var(--color-text);
 }
 
 .value {
-  font-size: 28px;
+  font-size: var(--font-size-digit);
+  font-variant-numeric: tabular-nums;
   line-height: 1;
 }
 
@@ -43,13 +45,13 @@
 }
 
 .candidate {
-  font-size: 11px;
-  color: #668;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
   line-height: 1;
 }
 
 .candidateHidden {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   visibility: hidden;
   line-height: 1;
 }
