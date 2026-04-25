@@ -22,6 +22,7 @@ import { xChains } from './strategies/xChains';
 import { xyChains } from './strategies/xyChains';
 import { alsXZ } from './strategies/alsXZ';
 import { alsXYWing } from './strategies/alsXYWing';
+import { forcingChains } from './strategies/forcingChains';
 
 const MAX_ITERATIONS = 1000;
 
@@ -50,6 +51,7 @@ const strategies: Strategy[] = [
   xyChains,
   alsXZ,
   alsXYWing,
+  forcingChains,
 ];
 
 export function solve(board: Board): SolveResult {
