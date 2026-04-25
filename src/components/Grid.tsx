@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Board, CellPosition } from '../types';
 import { createBoard, setCellValue } from '../board';
 import { Cell } from './Cell';
@@ -50,14 +50,19 @@ function detectConflicts(board: Board): Set<string> {
 
 interface GridProps {
   initialPuzzle?: string;
+  onBoardChange?: (board: Board) => void;
 }
 
-export function Grid({ initialPuzzle = '0'.repeat(81) }: GridProps) {
+export function Grid({ initialPuzzle = '0'.repeat(81), onBoardChange }: GridProps) {
   const [board, setBoard] = useState<Board>(() =>
     createBoard(initialPuzzle)
   );
   const [selectedPos, setSelectedPos] = useState<CellPosition | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    onBoardChange?.(board);
+  }, [board, onBoardChange]);
 
   const conflicts = useMemo(() => detectConflicts(board), [board]);
 

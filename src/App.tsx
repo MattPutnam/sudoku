@@ -1,12 +1,13 @@
 import { useState } from 'react';
+import type { Board } from './types';
 import { Grid } from './components/Grid';
 import PlaybackGrid from './components/PlaybackGrid';
 import { PlaybackControls } from './components/PlaybackControls';
 import { StepInfo } from './components/StepInfo';
 import { DifficultyBadge } from './components/DifficultyBadge';
 import { usePlayback } from './hooks/usePlayback';
-import { createBoard } from './board';
 import { solve } from './solver';
+import { validatePuzzle } from './utils/validatePuzzle';
 import styles from './App.module.css';
 
 const EXAMPLE_PUZZLE =
@@ -20,8 +21,12 @@ function App() {
   const [boardKey, setBoardKey] = useState(0);
   const [appMode, setAppMode] = useState<AppMode>('input');
   const [solveComplete, setSolveComplete] = useState(false);
+  const [currentBoard, setCurrentBoard] = useState<Board | null>(null);
 
   const playback = usePlayback();
+
+  const validation = currentBoard ? validatePuzzle(currentBoard) : null;
+  const canSolve = validation?.status === 'valid';
 
   const loadPuzzle = (p: string) => {
     setPuzzle(p);
@@ -29,9 +34,8 @@ function App() {
   };
 
   const handleSolve = () => {
-    const board = createBoard(puzzle);
-    const result = solve(board);
-    playback.startSolve(result, board);
+    const result = solve(currentBoard!);
+    playback.startSolve(result, currentBoard!);
     setSolveComplete(result.complete);
     setAppMode('playback');
   };
@@ -63,11 +67,13 @@ function App() {
             <button
               className={`${styles.button} ${styles.solveButton}`}
               onClick={handleSolve}
+              disabled={!canSolve}
+              title={!canSolve && validation ? validation.message : undefined}
             >
               Solve
             </button>
           </div>
-          <Grid key={boardKey} initialPuzzle={puzzle} />
+          <Grid key={boardKey} initialPuzzle={puzzle} onBoardChange={setCurrentBoard} />
         </>
       )}
 
