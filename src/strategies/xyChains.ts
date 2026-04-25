@@ -1,4 +1,5 @@
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { cpToKey, keyToCP } from '../utils/cellPosition';
 
 function sharesUnit(a: CellPosition, b: CellPosition): boolean {
   if (a.row === b.row) return true;
@@ -6,13 +7,6 @@ function sharesUnit(a: CellPosition, b: CellPosition): boolean {
   const boxA = Math.floor(a.row / 3) * 3 + Math.floor(a.col / 3);
   const boxB = Math.floor(b.row / 3) * 3 + Math.floor(b.col / 3);
   return boxA === boxB;
-}
-
-const key = (p: CellPosition) => `${p.row},${p.col}`;
-
-function parseKey(k: string): CellPosition {
-  const [r, c] = k.split(',').map(Number);
-  return { row: r, col: c };
 }
 
 interface BivalueCell {
@@ -36,12 +30,12 @@ export const xyChains: Strategy = (board: Board): SolveStep | null => {
 
   const bvMap = new Map<string, BivalueCell>();
   for (const bv of bivalueCells) {
-    bvMap.set(key(bv.pos), bv);
+    bvMap.set(cpToKey(bv.pos), bv);
   }
 
   const adj = new Map<string, string[]>();
   for (const bv of bivalueCells) {
-    adj.set(key(bv.pos), []);
+    adj.set(cpToKey(bv.pos), []);
   }
 
   for (let i = 0; i < bivalueCells.length; i++) {
@@ -51,8 +45,8 @@ export const xyChains: Strategy = (board: Board): SolveStep | null => {
       if (!sharesUnit(a.pos, b.pos)) continue;
       const shared = a.cands.filter(d => b.cands.includes(d));
       if (shared.length === 1) {
-        const ka = key(a.pos);
-        const kb = key(b.pos);
+        const ka = cpToKey(a.pos);
+        const kb = cpToKey(b.pos);
         adj.get(ka)!.push(kb);
         adj.get(kb)!.push(ka);
       }
@@ -62,7 +56,7 @@ export const xyChains: Strategy = (board: Board): SolveStep | null => {
   const MAX_CHAIN = 12;
 
   for (const start of bivalueCells) {
-    const startKey = key(start.pos);
+    const startKey = cpToKey(start.pos);
 
     for (const startDigit of start.cands) {
       const propagating = start.cands[0] === startDigit ? start.cands[1] : start.cands[0];
@@ -104,7 +98,7 @@ export const xyChains: Strategy = (board: Board): SolveStep | null => {
               if (cell.value !== null) continue;
               if (!cell.candidates.has(startDigit)) continue;
               const pos: CellPosition = { row: r, col: c };
-              const pk = key(pos);
+              const pk = cpToKey(pos);
               if (state.chain.includes(pk)) continue;
               if (sharesUnit(pos, start.pos) && sharesUnit(pos, endPos)) {
                 eliminations.set(pk, [startDigit]);
@@ -113,8 +107,8 @@ export const xyChains: Strategy = (board: Board): SolveStep | null => {
           }
 
           if (eliminations.size > 0) {
-            const chainPositions = state.chain.map(parseKey);
-            const elimCells = [...eliminations.keys()].map(parseKey);
+            const chainPositions = state.chain.map(keyToCP);
+            const elimCells = [...eliminations.keys()].map(keyToCP);
             return {
               strategy: 'XY-Chain',
               cellsAffected: elimCells,

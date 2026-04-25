@@ -1,5 +1,6 @@
 import { getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { keyToCP } from '../utils/cellPosition';
 
 export interface ALS {
   cells: CellPosition[];
@@ -168,10 +169,7 @@ export const alsXZ: Strategy = (board: Board): SolveStep | null => {
 
         if (eliminations.size > 0) {
           const reasonCells = [...a.cells, ...b.cells];
-          const elimCells = [...eliminations.keys()].map(k => {
-            const [r, c] = k.split(',').map(Number);
-            return { row: r, col: c };
-          });
+          const elimCells = [...eliminations.keys()].map(keyToCP);
 
           const aDigits = [...a.candidates].sort().join(',');
           const bDigits = [...b.candidates].sort().join(',');

@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { createBoard } from '../board';
 import { uniqueRectangle } from '../strategies/uniqueRectangles';
 import type { Board } from '../types';
+import { keyToCoords } from '../utils/cellPosition';
 
 function emptyBoard(): Board {
   return {
@@ -24,7 +25,7 @@ function setBoardCandidates(board: Board, overrides: Record<string, number[]>): 
     row.map((cell) => ({ ...cell, candidates: new Set(cell.candidates) })),
   );
   for (const [key, digits] of Object.entries(overrides)) {
-    const [r, c] = key.split(',').map(Number);
+    const [r, c] = keyToCoords(key);
     cells[r][c].candidates = new Set(digits);
   }
   return { cells };

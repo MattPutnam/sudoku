@@ -1,5 +1,6 @@
 import { getPeers } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { cpToKey, keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const xyzWing: Strategy = (board: Board): SolveStep | null => {
   for (let r = 0; r < 9; r++) {
@@ -41,20 +42,20 @@ export const xyzWing: Strategy = (board: Board): SolveStep | null => {
             const p2Key = `${p2.row},${p2.col}`;
 
             const pivotPeerKeys = new Set(
-              getPeers(board, pivot).map((cl) => `${cl.row},${cl.col}`),
+              getPeers(board, pivot).map(cpToKey),
             );
             const p1PeerKeys = new Set(
-              getPeers(board, p1).map((cl) => `${cl.row},${cl.col}`),
+              getPeers(board, p1).map(cpToKey),
             );
             const p2PeerKeys = new Set(
-              getPeers(board, p2).map((cl) => `${cl.row},${cl.col}`),
+              getPeers(board, p2).map(cpToKey),
             );
 
             const eliminations = new Map<string, number[]>();
             for (const key of pivotPeerKeys) {
               if (!p1PeerKeys.has(key) || !p2PeerKeys.has(key)) continue;
               if (key === pivotKey || key === p1Key || key === p2Key) continue;
-              const [er, ec] = key.split(',').map(Number);
+              const [er, ec] = keyToCoords(key);
               const cell = board.cells[er][ec];
               if (cell.value === null && cell.candidates.has(z)) {
                 eliminations.set(key, [z]);
@@ -65,10 +66,7 @@ export const xyzWing: Strategy = (board: Board): SolveStep | null => {
 
             return {
               strategy: 'XYZ-Wing',
-              cellsAffected: [...eliminations.keys()].map((k) => {
-                const [er, ec] = k.split(',').map(Number);
-                return { row: er, col: ec };
-              }),
+              cellsAffected: [...eliminations.keys()].map(keyToCP),
               candidatesEliminated: eliminations,
               valuePlaced: null,
               reasonCells: [pivot, p1, p2],

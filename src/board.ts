@@ -1,4 +1,5 @@
 import type { Board, Cell, CellPosition } from './types';
+import { cpToKey, keyToCoords } from './utils/cellPosition';
 
 export function createBoard(givens: string): Board {
   if (givens.length !== 81) {
@@ -25,6 +26,8 @@ export function createBoard(givens: string): Board {
 
   return computeCandidates({ cells });
 }
+
+export type GroupType = 'row' | 'column' | 'box';
 
 export function getRow(board: Board, row: number): Cell[] {
   return board.cells[row];
@@ -53,7 +56,7 @@ export function getPeers(board: Board, pos: CellPosition): Cell[] {
   seen.add(self);
 
   const addPeer = (cell: Cell) => {
-    const key = `${cell.row},${cell.col}`;
+    const key = cpToKey(cell);
     if (!seen.has(key)) {
       seen.add(key);
       peers.push(cell);
@@ -133,7 +136,7 @@ export function eliminateCandidates(
 ): Board {
   const newBoard = clone(board);
   for (const [key, digits] of eliminations) {
-    const [row, col] = key.split(',').map(Number);
+    const [row, col] = keyToCoords(key);
     const cell = newBoard.cells[row][col];
     if (cell.value !== null) continue;
     for (const digit of digits) {

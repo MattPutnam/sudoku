@@ -1,5 +1,6 @@
 import { getPeers, getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const wWing: Strategy = (board: Board): SolveStep | null => {
   const bivCells: CellPosition[] = [];
@@ -51,7 +52,7 @@ export const wWing: Strategy = (board: Board): SolveStep | null => {
           if (!c2PeerKeys.has(key)) continue;
           if (key === `${c1.row},${c1.col}` || key === `${c2.row},${c2.col}`) continue;
           if (key === `${link.end1.row},${link.end1.col}` || key === `${link.end2.row},${link.end2.col}`) continue;
-          const [r, c] = key.split(',').map(Number);
+          const [r, c] = keyToCoords(key);
           const cell = board.cells[r][c];
           if (cell.value === null && cell.candidates.has(elimDigit)) {
             eliminations.set(key, [elimDigit]);
@@ -64,10 +65,7 @@ export const wWing: Strategy = (board: Board): SolveStep | null => {
 
         return {
           strategy: 'W-Wing',
-          cellsAffected: [...eliminations.keys()].map((k) => {
-            const [r, c] = k.split(',').map(Number);
-            return { row: r, col: c };
-          }),
+          cellsAffected: [...eliminations.keys()].map(keyToCP),
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells,

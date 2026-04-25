@@ -3,6 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { createBoard } from '../board';
 import { xyChains } from '../strategies/xyChains';
 import type { Board } from '../types';
+import { keyToCoords } from '../utils/cellPosition';
 
 function emptyBoard(): Board {
   return {
@@ -24,7 +25,7 @@ function setBoardCandidates(board: Board, overrides: Record<string, number[]>): 
     row.map((cell) => ({ ...cell, candidates: new Set(cell.candidates) })),
   );
   for (const [key, digits] of Object.entries(overrides)) {
-    const [r, c] = key.split(',').map(Number);
+    const [r, c] = keyToCoords(key);
     cells[r][c].candidates = new Set(digits);
   }
   return { cells };
@@ -51,7 +52,7 @@ describe('XY-Chains', () => {
     const board = solvedBoard();
     const unsolved = ['0,0', '0,3', '3,3', '3,0'];
     for (const key of unsolved) {
-      const [r, c] = key.split(',').map(Number);
+      const [r, c] = keyToCoords(key);
       board.cells[r][c].value = null;
     }
 
@@ -85,7 +86,7 @@ describe('XY-Chains', () => {
     const board = solvedBoard();
     const unsolved = ['0,0', '0,3', '3,3', '3,0'];
     for (const key of unsolved) {
-      const [r, c] = key.split(',').map(Number);
+      const [r, c] = keyToCoords(key);
       board.cells[r][c].value = null;
     }
 
@@ -108,7 +109,7 @@ describe('XY-Chains', () => {
     const board = solvedBoard();
     const unsolved = ['0,0', '0,3', '3,3', '3,0'];
     for (const key of unsolved) {
-      const [r, c] = key.split(',').map(Number);
+      const [r, c] = keyToCoords(key);
       board.cells[r][c].value = null;
     }
 
@@ -134,7 +135,7 @@ describe('XY-Chains', () => {
     const board = solvedBoard();
     const unsolved = ['0,0', '0,3', '3,3', '3,0'];
     for (const key of unsolved) {
-      const [r, c] = key.split(',').map(Number);
+      const [r, c] = keyToCoords(key);
       board.cells[r][c].value = null;
     }
 

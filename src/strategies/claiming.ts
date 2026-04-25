@@ -1,5 +1,6 @@
 import { getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy } from '../types';
+import { keyToCP } from '../utils/cellPosition';
 
 export const claiming: Strategy = (board: Board): SolveStep | null => {
   // Check rows: if all candidates for a digit in a row fall in one box, eliminate from rest of box
@@ -28,10 +29,7 @@ export const claiming: Strategy = (board: Board): SolveStep | null => {
           .join(', ');
         return {
           strategy: 'Claiming',
-          cellsAffected: [...eliminations.keys()].map((k) => {
-            const [r, c] = k.split(',').map(Number);
-            return { row: r, col: c };
-          }),
+          cellsAffected: [...eliminations.keys()].map(keyToCP),
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells: cells.map((c) => ({ row: c.row, col: c.col })),
@@ -67,10 +65,7 @@ export const claiming: Strategy = (board: Board): SolveStep | null => {
           .join(', ');
         return {
           strategy: 'Claiming',
-          cellsAffected: [...eliminations.keys()].map((k) => {
-            const [r, c] = k.split(',').map(Number);
-            return { row: r, col: c };
-          }),
+          cellsAffected: [...eliminations.keys()].map(keyToCP),
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells: cells.map((c) => ({ row: c.row, col: c.col })),

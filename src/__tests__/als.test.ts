@@ -5,13 +5,14 @@ import { alsXYWing } from '../strategies/alsXYWing';
 import { alsXZ } from '../strategies/alsXZ';
 import { findAllALS } from '../strategies/alsXZ';
 import type { Board } from '../types';
+import { keyToCoords } from '../utils/cellPosition';
 
 function setBoardCandidates(board: Board, overrides: Record<string, number[]>): Board {
   const cells = board.cells.map((row) =>
     row.map((cell) => ({ ...cell, candidates: new Set(cell.candidates) })),
   );
   for (const [key, digits] of Object.entries(overrides)) {
-    const [r, c] = key.split(',').map(Number);
+    const [r, c] = keyToCoords(key);
     cells[r][c].candidates = new Set(digits);
   }
   return { cells };

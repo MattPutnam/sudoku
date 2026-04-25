@@ -1,5 +1,6 @@
 import { getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { coordsToKey, keyToCP } from '../utils/cellPosition';
 
 interface ConjugatePair {
   cell1: CellPosition;
@@ -11,7 +12,7 @@ function findConjugatePairs(board: Board, digit: number): ConjugatePair[] {
   const seen = new Set<string>();
 
   const addPair = (a: CellPosition, b: CellPosition) => {
-    const key = `${Math.min(a.row * 9 + a.col, b.row * 9 + b.col)},${Math.max(a.row * 9 + a.col, b.row * 9 + b.col)}`;
+    const key = coordsToKey(Math.min(a.row * 9 + a.col, b.row * 9 + b.col), Math.max(a.row * 9 + a.col, b.row * 9 + b.col));
     if (!seen.has(key)) {
       seen.add(key);
       pairs.push({ cell1: a, cell2: b });
@@ -117,10 +118,7 @@ function findColoringElimination(board: Board, digit: number): SolveStep | null 
 
             const allChainKeys = [...comp.colorA, ...comp.colorB];
             const reasonCells = allChainKeys.map(k => posMap.get(k)!);
-            const elimCells = [...eliminations.keys()].map(k => {
-              const [r, c] = k.split(',').map(Number);
-              return { row: r, col: c };
-            });
+            const elimCells = [...eliminations.keys()].map(keyToCP);
             const colorLabel = group === comp.colorA ? 'A' : 'B';
 
             return {
@@ -149,7 +147,7 @@ function findColoringElimination(board: Board, digit: number): SolveStep | null 
 
     for (let r = 0; r < 9; r++) {
       for (let c = 0; c < 9; c++) {
-        const key = `${r},${c}`;
+        const key = coordsToKey(r, c);
         if (chainKeys.has(key)) continue;
         const cell = board.cells[r][c];
         if (cell.value !== null || !cell.candidates.has(digit)) continue;
@@ -167,10 +165,7 @@ function findColoringElimination(board: Board, digit: number): SolveStep | null 
     if (eliminations.size === 0) continue;
 
     const reasonCells = [...comp.colorA, ...comp.colorB].map(k => posMap.get(k)!);
-    const elimCells = [...eliminations.keys()].map(k => {
-      const [r, c] = k.split(',').map(Number);
-      return { row: r, col: c };
-    });
+    const elimCells = [...eliminations.keys()].map(keyToCP);
 
     return {
       strategy: 'Simple Coloring',

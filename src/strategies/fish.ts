@@ -1,4 +1,5 @@
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { keyToCP } from '../utils/cellPosition';
 
 function combinations(indices: number[], size: number): number[][] {
   const result: number[][] = [];
@@ -94,10 +95,7 @@ function findFish(board: Board, size: number): SolveStep | null {
 
         return {
           strategy: strategyName,
-          cellsAffected: [...eliminations.keys()].map((k) => {
-            const [r, c] = k.split(',').map(Number);
-            return { row: r, col: c };
-          }),
+          cellsAffected: [...eliminations.keys()].map(keyToCP),
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells,

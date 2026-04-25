@@ -1,5 +1,6 @@
 import { getBox, getRow, getCol } from '../board';
 import type { Board, SolveStep, Strategy } from '../types';
+import { keyToCP } from '../utils/cellPosition';
 
 export const pointingPairs: Strategy = (board: Board): SolveStep | null => {
   for (let boxIdx = 0; boxIdx < 9; boxIdx++) {
@@ -29,10 +30,7 @@ export const pointingPairs: Strategy = (board: Board): SolveStep | null => {
             .join(', ');
           return {
             strategy: 'Pointing Pair',
-            cellsAffected: [...eliminations.keys()].map((k) => {
-              const [r, c] = k.split(',').map(Number);
-              return { row: r, col: c };
-            }),
+            cellsAffected: [...eliminations.keys()].map(keyToCP),
             candidatesEliminated: eliminations,
             valuePlaced: null,
             reasonCells: cells.map((c) => ({ row: c.row, col: c.col })),
@@ -56,10 +54,7 @@ export const pointingPairs: Strategy = (board: Board): SolveStep | null => {
             .join(', ');
           return {
             strategy: 'Pointing Pair',
-            cellsAffected: [...eliminations.keys()].map((k) => {
-              const [r, c] = k.split(',').map(Number);
-              return { row: r, col: c };
-            }),
+            cellsAffected: [...eliminations.keys()].map(keyToCP),
             candidatesEliminated: eliminations,
             valuePlaced: null,
             reasonCells: cells.map((c) => ({ row: c.row, col: c.col })),

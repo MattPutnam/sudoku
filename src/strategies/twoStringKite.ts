@@ -1,5 +1,6 @@
 import { getPeers } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const twoStringKite: Strategy = (board: Board): SolveStep | null => {
   for (let digit = 1; digit <= 9; digit++) {
@@ -51,7 +52,7 @@ export const twoStringKite: Strategy = (board: Board): SolveStep | null => {
           const eliminations = new Map<string, number[]>();
           for (const key of loose1Peers) {
             if (!loose2Peers.has(key)) continue;
-            const [r, c] = key.split(',').map(Number);
+            const [r, c] = keyToCoords(key);
             if (r === conn.boxLink1.row && c === conn.boxLink1.col) continue;
             if (r === conn.boxLink2.row && c === conn.boxLink2.col) continue;
             if (r === conn.loose1.row && c === conn.loose1.col) continue;
@@ -68,10 +69,7 @@ export const twoStringKite: Strategy = (board: Board): SolveStep | null => {
 
           return {
             strategy: '2-String Kite',
-            cellsAffected: [...eliminations.keys()].map((k) => {
-              const [r, c] = k.split(',').map(Number);
-              return { row: r, col: c };
-            }),
+            cellsAffected: [...eliminations.keys()].map(keyToCP),
             candidatesEliminated: eliminations,
             valuePlaced: null,
             reasonCells,

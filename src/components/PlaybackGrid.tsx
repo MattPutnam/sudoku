@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import PlaybackCell from './PlaybackCell';
 import styles from './PlaybackGrid.module.css';
 import type { Board, SolveStep } from '../types';
+import { coordsToKey } from '../utils/cellPosition';
 
 interface PlaybackGridProps {
   board: Board;
@@ -37,7 +38,7 @@ export default function PlaybackGrid({ board, currentStep }: PlaybackGridProps) 
     <div className={styles.grid}>
       {board.cells.flatMap((row, r) =>
         row.map((cell, c) => {
-          const key = `${r},${c}`;
+          const key = coordsToKey(r, c);
           const isReason = reasonSet.has(key);
           const isAffected = affectedSet.has(key);
           const isElimination = isAffected && key !== placementKey;

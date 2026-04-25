@@ -5,10 +5,7 @@ import { createBoard, setCellValue } from '../board';
 import { Cell } from './Cell';
 import styles from './Grid.module.css';
 import type { Board, CellPosition } from '../types';
-
-function posKey(row: number, col: number): string {
-  return `${row}-${col}`;
-}
+import { coordsToKey } from '../utils/cellPosition';
 
 function detectConflicts(board: Board): Set<string> {
   const conflicts = new Set<string>();
@@ -20,15 +17,15 @@ function detectConflicts(board: Board): Set<string> {
 
       for (let c = col + 1; c < 9; c++) {
         if (board.cells[row][c].value === cell.value) {
-          conflicts.add(posKey(row, col));
-          conflicts.add(posKey(row, c));
+          conflicts.add(coordsToKey(row, col));
+          conflicts.add(coordsToKey(row, c));
         }
       }
 
       for (let r = row + 1; r < 9; r++) {
         if (board.cells[r][col].value === cell.value) {
-          conflicts.add(posKey(row, col));
-          conflicts.add(posKey(r, col));
+          conflicts.add(coordsToKey(row, col));
+          conflicts.add(coordsToKey(r, col));
         }
       }
 
@@ -39,8 +36,8 @@ function detectConflicts(board: Board): Set<string> {
           if (r === row && c === col) continue;
           if (r < row || (r === row && c <= col)) continue;
           if (board.cells[r][c].value === cell.value) {
-            conflicts.add(posKey(row, col));
-            conflicts.add(posKey(r, c));
+            conflicts.add(coordsToKey(row, col));
+            conflicts.add(coordsToKey(r, c));
           }
         }
       }
@@ -128,7 +125,7 @@ export function Grid({ initialPuzzle = '0'.repeat(81), onBoardChange }: GridProp
     >
       {board.cells.map((row, rowIdx) =>
         row.map((cell, colIdx) => {
-          const key = posKey(rowIdx, colIdx);
+          const key = coordsToKey(rowIdx, colIdx);
           const extraClasses = cx(
             colIdx % 3 === 0 && colIdx !== 0 && styles.boxLeft,
             rowIdx % 3 === 0 && rowIdx !== 0 && styles.boxTop,

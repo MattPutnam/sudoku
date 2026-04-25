@@ -3,13 +3,14 @@ import { describe, it, expect } from 'vitest';
 import { createBoard } from '../board';
 import { hiddenPairs } from '../strategies/hiddenPairs';
 import type { Board } from '../types';
+import { cpToKey, keyToCoords } from '../utils/cellPosition';
 
 function setBoardCandidates(board: Board, overrides: Record<string, number[]>): Board {
   const cells = board.cells.map((row) =>
     row.map((cell) => ({ ...cell, candidates: new Set(cell.candidates) })),
   );
   for (const [key, digits] of Object.entries(overrides)) {
-    const [r, c] = key.split(',').map(Number);
+    const [r, c] = keyToCoords(key);
     cells[r][c].candidates = new Set(digits);
   }
   return { cells };
@@ -71,7 +72,7 @@ describe('hiddenPairs', () => {
 
     // Affected cells are the pair cells themselves
     for (const pos of step!.cellsAffected) {
-      const key = `${pos.row},${pos.col}`;
+      const key = cpToKey(pos);
       expect(step!.candidatesEliminated.has(key)).toBe(true);
     }
 

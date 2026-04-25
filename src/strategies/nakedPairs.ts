@@ -1,7 +1,6 @@
-import { getRow, getCol, getBox } from '../board';
+import { getRow, getCol, getBox, type GroupType } from '../board';
 import type { Board, Cell, SolveStep, Strategy } from '../types';
-
-type GroupType = 'row' | 'column' | 'box';
+import { keyToCP } from '../utils/cellPosition';
 
 function combinations(items: Cell[], size: number): Cell[][] {
   const result: Cell[][] = [];
@@ -61,10 +60,7 @@ export function findNakedSubset(
 
     return {
       strategy: strategyName,
-      cellsAffected: [...eliminations.keys()].map((k) => {
-        const [r, c] = k.split(',').map(Number);
-        return { row: r, col: c };
-      }),
+      cellsAffected: [...eliminations.keys()].map(keyToCP),
       candidatesEliminated: eliminations,
       valuePlaced: null,
       reasonCells: combo.map((c) => ({ row: c.row, col: c.col })),

@@ -5,11 +5,9 @@ export interface CellPosition {
 
 export type CandidateSet = Set<number>;
 
-export interface Cell {
+export interface Cell extends CellPosition {
   value: number | null;
   candidates: CandidateSet;
-  row: number;
-  col: number;
   box: number;
   isGiven: boolean;
 }

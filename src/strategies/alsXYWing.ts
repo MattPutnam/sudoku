@@ -1,7 +1,6 @@
 import { findAllALS, type ALS } from './alsXZ';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
-
-const key = (p: CellPosition) => `${p.row},${p.col}`;
+import { cpToKey, keyToCP } from '../utils/cellPosition';
 
 function sharesUnit(a: CellPosition, b: CellPosition): boolean {
   if (a.row === b.row) return true;
@@ -21,8 +20,8 @@ function cellsSeeEachOther(groupA: CellPosition[], groupB: CellPosition[]): bool
 }
 
 function overlaps(a: ALS, b: ALS): boolean {
-  const setB = new Set(b.cells.map(key));
-  return a.cells.some(c => setB.has(key(c)));
+  const setB = new Set(b.cells.map(cpToKey));
+  return a.cells.some(c => setB.has(cpToKey(c)));
 }
 
 function findRCC(board: Board, a: ALS, b: ALS): number[] {
@@ -66,9 +65,9 @@ export const alsXYWing: Strategy = (board: Board): SolveStep | null => {
             if (x === y) continue;
 
             const allCellKeys = new Set([
-              ...a.cells.map(key),
-              ...b.cells.map(key),
-              ...c.cells.map(key),
+              ...a.cells.map(cpToKey),
+              ...b.cells.map(cpToKey),
+              ...c.cells.map(cpToKey),
             ]);
 
             for (const z of b.candidates) {
@@ -92,7 +91,7 @@ export const alsXYWing: Strategy = (board: Board): SolveStep | null => {
                   if (cell.value !== null) continue;
                   if (!cell.candidates.has(z)) continue;
                   const pos: CellPosition = { row: r, col };
-                  const pk = key(pos);
+                  const pk = cpToKey(pos);
                   if (allCellKeys.has(pk)) continue;
 
                   const seesAll = allZCells.every(zc => sharesUnit(pos, zc));
@@ -104,10 +103,7 @@ export const alsXYWing: Strategy = (board: Board): SolveStep | null => {
 
               if (eliminations.size > 0) {
                 const reasonCells = [...a.cells, ...b.cells, ...c.cells];
-                const elimCells = [...eliminations.keys()].map(k => {
-                  const [r, col] = k.split(',').map(Number);
-                  return { row: r, col };
-                });
+                const elimCells = [...eliminations.keys()].map(keyToCP);
 
                 const fmtCells = (cells: CellPosition[]) =>
                   cells.map(cl => `R${cl.row + 1}C${cl.col + 1}`).join(',');

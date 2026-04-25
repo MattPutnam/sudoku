@@ -1,5 +1,6 @@
 import { getPeers } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const skyscraper: Strategy = (board: Board): SolveStep | null => {
   for (let digit = 1; digit <= 9; digit++) {
@@ -57,7 +58,7 @@ function findSkyscraper(
         const eliminations = new Map<string, number[]>();
         for (const key of topAPeers) {
           if (!topBPeers.has(key)) continue;
-          const [r, c] = key.split(',').map(Number);
+          const [r, c] = keyToCoords(key);
           if (r === conn.topA.row && c === conn.topA.col) continue;
           if (r === conn.topB.row && c === conn.topB.col) continue;
           if (r === conn.baseA.row && c === conn.baseA.col) continue;
@@ -74,10 +75,7 @@ function findSkyscraper(
 
         return {
           strategy: 'Skyscraper',
-          cellsAffected: [...eliminations.keys()].map((k) => {
-            const [r, c] = k.split(',').map(Number);
-            return { row: r, col: c };
-          }),
+          cellsAffected: [...eliminations.keys()].map(keyToCP),
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells,

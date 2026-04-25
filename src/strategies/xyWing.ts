@@ -1,5 +1,6 @@
 import { getPeers } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { keyToCoords, keyToCP } from '../utils/cellPosition';
 
 export const xyWing: Strategy = (board: Board): SolveStep | null => {
   const bivCells: CellPosition[] = [];
@@ -49,7 +50,7 @@ export const xyWing: Strategy = (board: Board): SolveStep | null => {
           if (!p2PeerKeys.has(key)) continue;
           if (key === `${pivot.row},${pivot.col}`) continue;
           if (key === `${p1.row},${p1.col}` || key === `${p2.row},${p2.col}`) continue;
-          const [r, c] = key.split(',').map(Number);
+          const [r, c] = keyToCoords(key);
           const cell = board.cells[r][c];
           if (cell.value === null && cell.candidates.has(cVal)) {
             eliminations.set(key, [cVal]);
@@ -60,10 +61,7 @@ export const xyWing: Strategy = (board: Board): SolveStep | null => {
 
         return {
           strategy: 'XY-Wing',
-          cellsAffected: [...eliminations.keys()].map((k) => {
-            const [r, c] = k.split(',').map(Number);
-            return { row: r, col: c };
-          }),
+          cellsAffected: [...eliminations.keys()].map(keyToCP),
           candidatesEliminated: eliminations,
           valuePlaced: null,
           reasonCells: [pivot, p1, p2],

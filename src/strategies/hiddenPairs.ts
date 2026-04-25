@@ -1,7 +1,5 @@
-import { getRow, getCol, getBox } from '../board';
+import { getRow, getCol, getBox, type GroupType } from '../board';
 import type { Board, Cell, SolveStep, Strategy } from '../types';
-
-type GroupType = 'row' | 'column' | 'box';
 
 function combinations(items: number[], size: number): number[][] {
   const result: number[][] = [];

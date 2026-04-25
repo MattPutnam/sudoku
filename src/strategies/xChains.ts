@@ -1,5 +1,6 @@
 import { getRow, getCol, getBox } from '../board';
 import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { cpToKey, keyToCP } from '../utils/cellPosition';
 
 function sharesUnit(a: CellPosition, b: CellPosition): boolean {
   if (a.row === b.row) return true;
@@ -32,11 +33,9 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
   const strongLinks = new Map<string, Set<string>>();
   const weakLinks = new Map<string, Set<string>>();
 
-  const key = (p: CellPosition) => `${p.row},${p.col}`;
-
   for (const cell of candidateCells) {
-    strongLinks.set(key(cell), new Set());
-    weakLinks.set(key(cell), new Set());
+    strongLinks.set(cpToKey(cell), new Set());
+    weakLinks.set(cpToKey(cell), new Set());
   }
 
   // Strong links: conjugate pairs (digit in exactly 2 cells in a unit)
@@ -44,8 +43,8 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
     const rowCells = getRow(board, i)
       .filter(c => c.value === null && c.candidates.has(digit));
     if (rowCells.length === 2) {
-      const k0 = key(rowCells[0]);
-      const k1 = key(rowCells[1]);
+      const k0 = cpToKey(rowCells[0]);
+      const k1 = cpToKey(rowCells[1]);
       strongLinks.get(k0)?.add(k1);
       strongLinks.get(k1)?.add(k0);
     }
@@ -53,8 +52,8 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
     const colCells = getCol(board, i)
       .filter(c => c.value === null && c.candidates.has(digit));
     if (colCells.length === 2) {
-      const k0 = key(colCells[0]);
-      const k1 = key(colCells[1]);
+      const k0 = cpToKey(colCells[0]);
+      const k1 = cpToKey(colCells[1]);
       strongLinks.get(k0)?.add(k1);
       strongLinks.get(k1)?.add(k0);
     }
@@ -62,8 +61,8 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
     const boxCells = getBox(board, i)
       .filter(c => c.value === null && c.candidates.has(digit));
     if (boxCells.length === 2) {
-      const k0 = key(boxCells[0]);
-      const k1 = key(boxCells[1]);
+      const k0 = cpToKey(boxCells[0]);
+      const k1 = cpToKey(boxCells[1]);
       strongLinks.get(k0)?.add(k1);
       strongLinks.get(k1)?.add(k0);
     }
@@ -75,8 +74,8 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
       const a = candidateCells[i];
       const b = candidateCells[j];
       if (sharesUnit(a, b)) {
-        const ka = key(a);
-        const kb = key(b);
+        const ka = cpToKey(a);
+        const kb = cpToKey(b);
         if (!strongLinks.get(ka)?.has(kb)) {
           weakLinks.get(ka)?.add(kb);
           weakLinks.get(kb)?.add(ka);
@@ -114,14 +113,14 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
       const state = queue.shift()!;
 
       if (state.linkCount >= 3 && state.linkCount % 2 === 1 && state.nextLink === 'weak') {
-        const startPos = parseKey(startKey);
-        const endPos = parseKey(state.current);
+        const startPos = keyToCP(startKey);
+        const endPos = keyToCP(state.current);
 
         if (startKey !== state.current) {
           const eliminations = new Map<string, number[]>();
 
           for (const cell of candidateCells) {
-            const ck = key(cell);
+            const ck = cpToKey(cell);
             if (state.chain.includes(ck)) continue;
             if (sharesUnit(cell, startPos) && sharesUnit(cell, endPos)) {
               eliminations.set(ck, [digit]);
@@ -129,8 +128,8 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
           }
 
           if (eliminations.size > 0) {
-            const chainPositions = state.chain.map(parseKey);
-            const elimCells = [...eliminations.keys()].map(parseKey);
+            const chainPositions = state.chain.map(keyToCP);
+            const elimCells = [...eliminations.keys()].map(keyToCP);
 
             return {
               strategy: 'X-Chain',
@@ -163,9 +162,4 @@ function findXChainElimination(board: Board, digit: number): SolveStep | null {
   }
 
   return null;
-}
-
-function parseKey(key: string): CellPosition {
-  const [r, c] = key.split(',').map(Number);
-  return { row: r, col: c };
 }
