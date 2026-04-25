@@ -1,0 +1,29 @@
+.container {
+  max-width: 542px;
+  text-align: left;
+  margin-top: 12px;
+}
+
+.prompt {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+.strategy {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a2e;
+  background: #eef0f5;
+  padding: 2px 10px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.explanation {
+  font-size: 14px;
+  color: #444;
+  margin: 4px 0 0;
+  line-height: 1.4;
+}

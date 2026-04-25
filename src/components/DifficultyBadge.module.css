@@ -1,0 +1,33 @@
+.badge {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 4px 14px;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+.trivial {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.easy {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.medium {
+  background: #fff8e1;
+  color: #f57f17;
+}
+
+.hard {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.expert {
+  background: #ffebee;
+  color: #c62828;
+}
