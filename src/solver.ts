@@ -10,6 +10,13 @@ import { nakedTriples } from './strategies/nakedTriples';
 import { hiddenTriples } from './strategies/hiddenTriples';
 import { nakedQuads } from './strategies/nakedQuads';
 import { hiddenQuads } from './strategies/hiddenQuads';
+import { xWing, swordfish, jellyfish } from './strategies/fish';
+import { skyscraper } from './strategies/skyscraper';
+import { twoStringKite } from './strategies/twoStringKite';
+import { xyWing } from './strategies/xyWing';
+import { xyzWing } from './strategies/xyzWing';
+import { wWing } from './strategies/wWing';
+import { uniqueRectangle } from './strategies/uniqueRectangles';
 
 const MAX_ITERATIONS = 1000;
 
@@ -24,6 +31,15 @@ const strategies: Strategy[] = [
   hiddenTriples,
   nakedQuads,
   hiddenQuads,
+  xWing,
+  swordfish,
+  jellyfish,
+  skyscraper,
+  twoStringKite,
+  xyWing,
+  xyzWing,
+  wWing,
+  uniqueRectangle,
 ];
 
 export function solve(board: Board): SolveResult {

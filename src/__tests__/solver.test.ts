@@ -138,3 +138,73 @@ describe('solve — medium puzzle', () => {
     }
   });
 });
+
+const TIER3_NAMES = [
+  'X-Wing',
+  'Swordfish',
+  'Jellyfish',
+  'Skyscraper',
+  '2-String Kite',
+  'XY-Wing',
+  'XYZ-Wing',
+  'W-Wing',
+  'Unique Rectangle',
+];
+
+// Puzzle requiring XYZ-Wing to make progress beyond Tier 1/2
+const XYZ_WING_PUZZLE =
+  '900084000000000058040900000001000300060000020003000600000001030370000000000760004';
+
+// Puzzle requiring Unique Rectangle to make progress beyond Tier 1/2
+const UR_PUZZLE =
+  '000000000000003085001020000000507000004000100090000000500000073002010000000040900';
+
+describe('solve — hard puzzle with Tier 3', () => {
+  it('uses at least one Tier 3 strategy on a puzzle requiring XYZ-Wing', () => {
+    const board = createBoard(XYZ_WING_PUZZLE);
+    const result = solve(board);
+
+    const usedStrategies = result.steps.map((s) => s.strategy);
+    const hasTier3 = usedStrategies.some((name) => TIER3_NAMES.includes(name));
+
+    expect(hasTier3).toBe(true);
+    expect(usedStrategies).toContain('XYZ-Wing');
+  });
+
+  it('uses at least one Tier 3 strategy on a puzzle requiring Unique Rectangle', () => {
+    const board = createBoard(UR_PUZZLE);
+    const result = solve(board);
+
+    const usedStrategies = result.steps.map((s) => s.strategy);
+    const hasTier3 = usedStrategies.some((name) => TIER3_NAMES.includes(name));
+
+    expect(hasTier3).toBe(true);
+    expect(usedStrategies).toContain('Unique Rectangle');
+  });
+
+  it('every step has either valuePlaced or non-empty candidatesEliminated', () => {
+    const board = createBoard(XYZ_WING_PUZZLE);
+    const result = solve(board);
+
+    for (const step of result.steps) {
+      if (step.valuePlaced !== null) {
+        const { position, value } = step.valuePlaced;
+        expect(position.row).toBeGreaterThanOrEqual(0);
+        expect(position.row).toBeLessThanOrEqual(8);
+        expect(position.col).toBeGreaterThanOrEqual(0);
+        expect(position.col).toBeLessThanOrEqual(8);
+        expect(value).toBeGreaterThanOrEqual(1);
+        expect(value).toBeLessThanOrEqual(9);
+      } else {
+        expect(step.candidatesEliminated.size).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('makes more progress than Tier 1/2 alone on the hard puzzle', () => {
+    const board = createBoard(XYZ_WING_PUZZLE);
+    const result = solve(board);
+
+    expect(result.steps.length).toBeGreaterThan(10);
+  });
+});
