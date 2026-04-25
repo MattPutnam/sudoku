@@ -36,8 +36,9 @@ export function PlaybackControls({
         onClick={onStepBackward}
         disabled={isAtStart}
         aria-label="Step backward"
+        title="Step backward"
       >
-        ◀
+        |◀
       </button>
 
       <button
@@ -45,6 +46,7 @@ export function PlaybackControls({
         onClick={isPlaying ? onPause : onPlay}
         disabled={isAtEnd && !isPlaying}
         aria-label={isPlaying ? 'Pause' : 'Play'}
+        title={isPlaying ? 'Pause' : 'Play'}
       >
         {isPlaying ? '⏸' : '▶'}
       </button>
@@ -54,8 +56,9 @@ export function PlaybackControls({
         onClick={onStepForward}
         disabled={isAtEnd}
         aria-label="Step forward"
+        title="Step forward"
       >
-        ▶▶
+        ▶|
       </button>
 
       <button
@@ -63,6 +66,7 @@ export function PlaybackControls({
         onClick={onReset}
         disabled={isAtStart}
         aria-label="Reset"
+        title="Reset"
       >
         ↺
       </button>
