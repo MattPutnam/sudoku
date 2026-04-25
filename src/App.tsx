@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import styles from './App.module.css';
 import { Button } from './components/Button';
 import { DifficultyBadge } from './components/DifficultyBadge';
+import type { DropdownItem } from './components/DropdownButton';
+import { DropdownButton } from './components/DropdownButton';
 import { Grid } from './components/Grid';
 import { PlaybackControls } from './components/PlaybackControls';
 import PlaybackGrid from './components/PlaybackGrid';
@@ -10,11 +12,9 @@ import { StepInfo } from './components/StepInfo';
 import { usePlayback } from './hooks/usePlayback';
 import { solve } from './solver';
 import type { Board } from './types';
+import { EXAMPLE_PUZZLES } from './utils/examplePuzzles';
 import { validatePuzzle } from './utils/validatePuzzle';
 
-
-const EXAMPLE_PUZZLE =
-  '530070000600195000098000060800060003400803001700020006060000280000419005000080079';
 const EMPTY_PUZZLE = '0'.repeat(81);
 
 type AppMode = 'input' | 'playback';
@@ -31,10 +31,19 @@ function App() {
   const validation = currentBoard ? validatePuzzle(currentBoard) : null;
   const canSolve = validation?.status === 'valid';
 
-  const loadPuzzle = (p: string) => {
+  const loadPuzzle = useCallback((p: string) => {
     setPuzzle(p);
     setBoardKey((k) => k + 1);
-  };
+  }, []);
+
+  const exampleItems: DropdownItem[] = useMemo(
+    () =>
+      EXAMPLE_PUZZLES.map((ep) => ({
+        label: ep.label,
+        onClick: () => loadPuzzle(ep.puzzle),
+      })),
+    [loadPuzzle],
+  );
 
   const handleSolve = () => {
     const result = solve(currentBoard!);
@@ -55,9 +64,7 @@ function App() {
       {appMode === 'input' && (
         <>
           <div className={styles.controls}>
-            <Button onClick={() => loadPuzzle(EXAMPLE_PUZZLE)}>
-              Load Example Puzzle
-            </Button>
+            <DropdownButton label="Load Example" items={exampleItems} />
             <Button onClick={() => loadPuzzle(EMPTY_PUZZLE)}>
               Clear
             </Button>
