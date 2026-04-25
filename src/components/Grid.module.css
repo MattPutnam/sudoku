@@ -1,0 +1,22 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(9, 60px);
+  grid-template-rows: repeat(9, 60px);
+  outline: none;
+  border: 2px solid #333;
+  width: fit-content;
+  background: #bbb;
+  gap: 1px;
+}
+
+.grid:focus {
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.4);
+}
+
+.boxLeft {
+  border-left: 1px solid #333;
+}
+
+.boxTop {
+  border-top: 1px solid #333;
+}
