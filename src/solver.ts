@@ -20,6 +20,8 @@ import { uniqueRectangle } from './strategies/uniqueRectangles';
 import { simpleColoring } from './strategies/simpleColoring';
 import { xChains } from './strategies/xChains';
 import { xyChains } from './strategies/xyChains';
+import { alsXZ } from './strategies/alsXZ';
+import { alsXYWing } from './strategies/alsXYWing';
 
 const MAX_ITERATIONS = 1000;
 
@@ -46,6 +48,8 @@ const strategies: Strategy[] = [
   simpleColoring,
   xChains,
   xyChains,
+  alsXZ,
+  alsXYWing,
 ];
 
 export function solve(board: Board): SolveResult {
