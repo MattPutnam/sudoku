@@ -8,12 +8,18 @@ export interface DropdownItem {
   onClick: () => void;
 }
 
-interface DropdownButtonProps {
-  label: string;
+export interface DropdownSection {
+  heading: string;
   items: DropdownItem[];
 }
 
-export function DropdownButton({ label, items }: DropdownButtonProps) {
+interface DropdownButtonProps {
+  label: string;
+  items?: DropdownItem[];
+  sections?: DropdownSection[];
+}
+
+export function DropdownButton({ label, items, sections }: DropdownButtonProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +36,19 @@ export function DropdownButton({ label, items }: DropdownButtonProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [open]);
 
+  const renderItem = (item: DropdownItem) => (
+    <button
+      key={item.label}
+      className={styles.menuItem}
+      onClick={() => {
+        item.onClick();
+        setOpen(false);
+      }}
+    >
+      {item.label}
+    </button>
+  );
+
   return (
     <div ref={containerRef} className={styles.container}>
       <Button onClick={() => setOpen((o) => !o)}>
@@ -37,18 +56,15 @@ export function DropdownButton({ label, items }: DropdownButtonProps) {
       </Button>
       {open && (
         <div className={styles.menu}>
-          {items.map((item) => (
-            <button
-              key={item.label}
-              className={styles.menuItem}
-              onClick={() => {
-                item.onClick();
-                setOpen(false);
-              }}
-            >
-              {item.label}
-            </button>
-          ))}
+          {sections
+            ? sections.map((section, i) => (
+                <div key={section.heading}>
+                  {i > 0 && <div className={styles.divider} />}
+                  <div className={styles.sectionHeading}>{section.heading}</div>
+                  {section.items.map(renderItem)}
+                </div>
+              ))
+            : items?.map(renderItem)}
         </div>
       )}
     </div>

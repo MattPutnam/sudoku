@@ -8,6 +8,8 @@
   top: calc(100% + 4px);
   left: 0;
   min-width: 100%;
+  max-height: 400px;
+  overflow-y: auto;
   background: var(--color-surface);
   border: 1px solid var(--color-border-light);
   border-radius: var(--border-radius);
@@ -36,4 +38,20 @@
 
 .menuItem:active {
   background: #ddd;
+}
+
+.sectionHeading {
+  padding: 6px 12px 2px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-dim, #888);
+  pointer-events: none;
+}
+
+.divider {
+  height: 1px;
+  background: var(--color-border-light, #e0e0e0);
+  margin: 4px 0;
 }

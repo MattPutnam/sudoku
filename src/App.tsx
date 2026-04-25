@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import styles from './App.module.css';
 import { Button } from './components/Button';
 import { DifficultyBadge } from './components/DifficultyBadge';
-import type { DropdownItem } from './components/DropdownButton';
+import type { DropdownSection } from './components/DropdownButton';
 import { DropdownButton } from './components/DropdownButton';
 import { Grid } from './components/Grid';
 import { PlaybackControls } from './components/PlaybackControls';
@@ -12,7 +12,7 @@ import { StepInfo } from './components/StepInfo';
 import { usePlayback } from './hooks/usePlayback';
 import { solve } from './solver';
 import type { Board } from './types';
-import { EXAMPLE_PUZZLES } from './utils/examplePuzzles';
+import { PUZZLE_GROUPS } from './utils/examplePuzzles';
 import { validatePuzzle } from './utils/validatePuzzle';
 
 const EMPTY_PUZZLE = '0'.repeat(81);
@@ -36,11 +36,14 @@ function App() {
     setBoardKey((k) => k + 1);
   }, []);
 
-  const exampleItems: DropdownItem[] = useMemo(
+  const exampleSections: DropdownSection[] = useMemo(
     () =>
-      EXAMPLE_PUZZLES.map((ep) => ({
-        label: ep.label,
-        onClick: () => loadPuzzle(ep.puzzle),
+      PUZZLE_GROUPS.map((group) => ({
+        heading: group.heading,
+        items: group.puzzles.map((ep) => ({
+          label: ep.label,
+          onClick: () => loadPuzzle(ep.puzzle),
+        })),
       })),
     [loadPuzzle],
   );
@@ -59,12 +62,12 @@ function App() {
 
   return (
     <div className={styles.app}>
-      <h1 className={styles.title}>Sudoku</h1>
+      <h1 className={styles.title}>Sudoku Solver</h1>
 
       {appMode === 'input' && (
         <>
           <div className={styles.controls}>
-            <DropdownButton label="Load Example" items={exampleItems} />
+            <DropdownButton label="Load Puzzle" sections={exampleSections} />
             <Button onClick={() => loadPuzzle(EMPTY_PUZZLE)}>
               Clear
             </Button>
