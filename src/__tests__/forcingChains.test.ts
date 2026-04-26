@@ -123,11 +123,11 @@ describe('forcingChains', () => {
     expect(result!.reasonCells.length).toBeGreaterThan(0);
   });
 
-  it('only tries cells with 2-3 candidates', () => {
+  it('only tries cells with up to 5 candidates', () => {
     const board = emptyBoard();
-    // Only cell has 4 candidates — should not be tried
+    // Only cell has 6 candidates — should not be tried
     const modified = setBoardCandidates(board, {
-      '0,0': [1, 2, 3, 4],
+      '0,0': [1, 2, 3, 4, 5, 6],
     });
     expect(forcingChains(modified)).toBeNull();
   });

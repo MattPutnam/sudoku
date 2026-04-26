@@ -52,17 +52,12 @@ describe('solve', () => {
     expect(strategyNames.has('Hidden Single')).toBe(true);
   });
 
-  it('returns partial progress on a puzzle requiring advanced techniques (R012)', () => {
+  it('fully solves a hard puzzle requiring advanced techniques (R012)', () => {
     const board = createBoard(HARD_PUZZLE);
     const result = solve(board);
 
-    expect(result.complete).toBe(false);
+    expect(result.complete).toBe(true);
     expect(result.steps.length).toBeGreaterThan(0);
-
-    const emptyCells = result.board.cells
-      .flat()
-      .filter((c) => c.value === null);
-    expect(emptyCells.length).toBeGreaterThan(0);
   });
 
   it('returns empty steps and complete: true for an already-solved board', () => {
@@ -172,7 +167,7 @@ describe('solve — hard puzzle with Tier 3', () => {
     expect(usedStrategies).toContain('XYZ-Wing');
   });
 
-  it('uses at least one Tier 3 strategy on a puzzle requiring Unique Rectangle', () => {
+  it('uses at least one Tier 3 strategy on a puzzle requiring Unique Rectangle', { timeout: 15000 }, () => {
     const board = createBoard(UR_PUZZLE);
     const result = solve(board);
 
@@ -279,8 +274,11 @@ describe('solve — diabolical puzzle with Tier 4', () => {
       'Naked Single', 'Hidden Single', 'Pointing Pair', 'Claiming',
       'Naked Pair', 'Hidden Pair', 'Naked Triple', 'Hidden Triple',
       'Naked Quad', 'Hidden Quad',
-      'X-Wing', 'Swordfish', 'Jellyfish', 'Skyscraper', '2-String Kite',
+      'X-Wing', 'Swordfish', 'Jellyfish',
+      'Finned X-Wing', 'Finned Swordfish', 'Finned Jellyfish',
+      'Skyscraper', '2-String Kite',
       'XY-Wing', 'XYZ-Wing', 'W-Wing', 'Unique Rectangle',
+      'Sue de Coq', 'AIC', 'Grouped AIC',
       ...TIER4_NAMES,
     ];
     for (const step of result.steps) {

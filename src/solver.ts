@@ -1,9 +1,12 @@
 import { eliminateCandidates, setCellValue } from './board';
+import { aic } from './strategies/aic';
 import { alsXYWing } from './strategies/alsXYWing';
 import { alsXZ } from './strategies/alsXZ';
 import { claiming } from './strategies/claiming';
+import { finnedXWing, finnedSwordfish, finnedJellyfish } from './strategies/finnedFish';
 import { xWing, swordfish, jellyfish } from './strategies/fish';
 import { forcingChains } from './strategies/forcingChains';
+import { groupedAic } from './strategies/groupedAic';
 import { hiddenPairs } from './strategies/hiddenPairs';
 import { hiddenQuads } from './strategies/hiddenQuads';
 import { hiddenSingles } from './strategies/hiddenSingles';
@@ -15,6 +18,7 @@ import { nakedTriples } from './strategies/nakedTriples';
 import { pointingPairs } from './strategies/pointingPairs';
 import { simpleColoring } from './strategies/simpleColoring';
 import { skyscraper } from './strategies/skyscraper';
+import { sueDeCoq } from './strategies/sueDeCoq';
 import { twoStringKite } from './strategies/twoStringKite';
 import { uniqueRectangle } from './strategies/uniqueRectangles';
 import { wWing } from './strategies/wWing';
@@ -40,6 +44,9 @@ const strategies: Strategy[] = [
   xWing,
   swordfish,
   jellyfish,
+  finnedXWing,
+  finnedSwordfish,
+  finnedJellyfish,
   skyscraper,
   twoStringKite,
   xyWing,
@@ -51,6 +58,9 @@ const strategies: Strategy[] = [
   xyChains,
   alsXZ,
   alsXYWing,
+  sueDeCoq,
+  aic,
+  groupedAic,
   forcingChains,
 ];
 

@@ -1,8 +1,71 @@
-import { clone, setCellValue, getRow, getCol, getBox } from '../board';
-import type { Board, SolveStep, Strategy, CellPosition } from '../types';
+import { clone, eliminateCandidates, setCellValue, getRow, getCol, getBox } from '../board';
+import type { Board, SolveStep, Strategy } from '../types';
+import { aic } from './aic';
+import { alsXYWing } from './alsXYWing';
+import { alsXZ } from './alsXZ';
+import { claiming } from './claiming';
+import { finnedXWing, finnedSwordfish } from './finnedFish';
+import { xWing, swordfish } from './fish';
+import { hiddenPairs } from './hiddenPairs';
+import { hiddenSingles } from './hiddenSingles';
+import { hiddenTriples } from './hiddenTriples';
+import { nakedPairs } from './nakedPairs';
+import { nakedSingles } from './nakedSingles';
+import { nakedTriples } from './nakedTriples';
+import { pointingPairs } from './pointingPairs';
+import { simpleColoring } from './simpleColoring';
+import { skyscraper } from './skyscraper';
+import { sueDeCoq } from './sueDeCoq';
+import { twoStringKite } from './twoStringKite';
+import { wWing } from './wWing';
+import { xChains } from './xChains';
+import { xyChains } from './xyChains';
+import { xyWing } from './xyWing';
+import { xyzWing } from './xyzWing';
 import { coordsToDisplay } from '../utils/cellPosition';
 
-const MAX_PROPAGATION = 50;
+const MAX_PROPAGATION = 200;
+const MAX_CANDIDATE_SIZE = 5;
+const MAX_DEPTH = 2;
+const TIMEOUT_MS = 15000;
+
+const fullStrategies: Strategy[] = [
+  nakedSingles,
+  hiddenSingles,
+  pointingPairs,
+  claiming,
+  nakedPairs,
+  hiddenPairs,
+  nakedTriples,
+  hiddenTriples,
+  xWing,
+  swordfish,
+  finnedXWing,
+  finnedSwordfish,
+  skyscraper,
+  twoStringKite,
+  xyWing,
+  xyzWing,
+  wWing,
+  simpleColoring,
+  xChains,
+  xyChains,
+  alsXZ,
+  alsXYWing,
+  sueDeCoq,
+  aic,
+];
+
+const lightStrategies: Strategy[] = [
+  nakedSingles,
+  hiddenSingles,
+  pointingPairs,
+  claiming,
+  nakedPairs,
+  hiddenPairs,
+  nakedTriples,
+  hiddenTriples,
+];
 
 function hasContradiction(board: Board): { found: boolean; detail: string } {
   for (let r = 0; r < 9; r++) {
@@ -50,78 +113,58 @@ function hasContradiction(board: Board): { found: boolean; detail: string } {
   return { found: false, detail: '' };
 }
 
-function findHiddenSingle(board: Board): CellPosition & { value: number } | null {
-  const units: { cells: ReturnType<typeof getRow> }[] = [];
-  for (let i = 0; i < 9; i++) {
-    units.push({ cells: getRow(board, i) });
-    units.push({ cells: getCol(board, i) });
-    units.push({ cells: getBox(board, i) });
-  }
-
-  for (const unit of units) {
-    for (let digit = 1; digit <= 9; digit++) {
-      const placed = unit.cells.some(c => c.value === digit);
-      if (placed) continue;
-
-      const possible = unit.cells.filter(c => c.value === null && c.candidates.has(digit));
-      if (possible.length === 1) {
-        return { row: possible[0].row, col: possible[0].col, value: digit };
-      }
-    }
-  }
-
-  return null;
-}
-
-function propagate(board: Board): { board: Board; contradiction: string | null } {
+function propagate(board: Board, depth: number, deadline: number): { board: Board; contradiction: string | null } {
   let current = board;
+  const strategies = depth === 0 ? fullStrategies : lightStrategies;
 
   for (let iter = 0; iter < MAX_PROPAGATION; iter++) {
+    if (Date.now() > deadline) return { board: current, contradiction: null };
+
     const check = hasContradiction(current);
     if (check.found) return { board: current, contradiction: check.detail };
 
-    let placed = false;
+    let advanced = false;
 
-    // Naked singles
-    for (let r = 0; r < 9; r++) {
-      for (let c = 0; c < 9; c++) {
-        const cell = current.cells[r][c];
-        if (cell.value === null && cell.candidates.size === 1) {
-          const val = [...cell.candidates][0];
-          current = setCellValue(current, { row: r, col: c }, val);
-          placed = true;
+    for (const strategy of strategies) {
+      const step = strategy(current);
+      if (step !== null) {
+        if (step.valuePlaced !== null) {
+          current = setCellValue(current, step.valuePlaced.position, step.valuePlaced.value);
+        } else if (step.candidatesEliminated.size > 0) {
+          current = eliminateCandidates(current, step.candidatesEliminated);
+        }
+        advanced = true;
+        break;
+      }
+    }
 
-          const postCheck = hasContradiction(current);
-          if (postCheck.found) return { board: current, contradiction: postCheck.detail };
+    if (!advanced && depth < MAX_DEPTH) {
+      const fcResult = tryForcingChain(current, depth + 1, deadline);
+      if (fcResult) {
+        if (fcResult.candidatesEliminated.size > 0) {
+          current = eliminateCandidates(current, fcResult.candidatesEliminated);
+          advanced = true;
         }
       }
     }
 
-    // Hidden singles
-    if (!placed) {
-      const hs = findHiddenSingle(current);
-      if (hs) {
-        current = setCellValue(current, { row: hs.row, col: hs.col }, hs.value);
-        placed = true;
-
-        const postCheck = hasContradiction(current);
-        if (postCheck.found) return { board: current, contradiction: postCheck.detail };
-      }
-    }
-
-    if (!placed) break;
+    if (!advanced) break;
   }
+
+  const finalCheck = hasContradiction(current);
+  if (finalCheck.found) return { board: current, contradiction: finalCheck.detail };
 
   return { board: current, contradiction: null };
 }
 
-export const forcingChains: Strategy = (board: Board): SolveStep | null => {
+function tryForcingChain(board: Board, depth: number, deadline: number): SolveStep | null {
+  const maxCandSize = depth === 0 ? MAX_CANDIDATE_SIZE : 3;
   const candidates: { row: number; col: number; count: number }[] = [];
 
   for (let r = 0; r < 9; r++) {
     for (let c = 0; c < 9; c++) {
       const cell = board.cells[r][c];
-      if (cell.value === null && cell.candidates.size >= 2 && cell.candidates.size <= 3) {
+      if (cell.value === null && cell.candidates.size >= 2 && cell.candidates.size <= maxCandSize) {
         candidates.push({ row: r, col: c, count: cell.candidates.size });
       }
     }
@@ -130,12 +173,16 @@ export const forcingChains: Strategy = (board: Board): SolveStep | null => {
   candidates.sort((a, b) => a.count - b.count);
 
   for (const { row, col } of candidates) {
+    if (Date.now() > deadline) return null;
+
     const cell = board.cells[row][col];
 
     for (const digit of cell.candidates) {
       const testBoard = clone(board);
       const placed = setCellValue(testBoard, { row, col }, digit);
-      const result = propagate(placed);
+      const result = propagate(placed, depth, deadline);
+
+      if (Date.now() > deadline) return null;
 
       if (result.contradiction !== null) {
         const eliminations = new Map<string, number[]>();
@@ -154,4 +201,9 @@ export const forcingChains: Strategy = (board: Board): SolveStep | null => {
   }
 
   return null;
+}
+
+export const forcingChains: Strategy = (board: Board): SolveStep | null => {
+  const deadline = Date.now() + TIMEOUT_MS;
+  return tryForcingChain(board, 0, deadline);
 };

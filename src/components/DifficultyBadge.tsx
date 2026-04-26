@@ -13,6 +13,7 @@ const LEVEL_CLASS_KEYS: Record<number, string> = {
   2: 'medium',
   3: 'hard',
   4: 'expert',
+  5: 'extreme',
 };
 
 export function DifficultyBadge({ difficulty, isComplete }: DifficultyBadgeProps) {

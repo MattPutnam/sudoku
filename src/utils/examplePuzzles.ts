@@ -19,7 +19,7 @@ export const PUZZLE_GROUPS: PuzzleGroup[] = [
     ],
   },
   {
-    heading: 'Famous Extreme Puzzles',
+    heading: 'Famous Puzzles',
     puzzles: [
       { label: 'Escargot', puzzle: '100007090030020008009600500005300900010080002600004000300000010040000007007000300' },
       { label: 'Platinum Blonde', puzzle: '000000012000000003002300400001800005060070800000009000008500000900040500470006000' },

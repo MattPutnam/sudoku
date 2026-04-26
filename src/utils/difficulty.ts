@@ -16,6 +16,9 @@ const STRATEGY_TIERS: Record<string, number> = {
   'X-Wing': 3,
   'Swordfish': 3,
   'Jellyfish': 3,
+  'Finned X-Wing': 3,
+  'Finned Swordfish': 3,
+  'Finned Jellyfish': 3,
   'Skyscraper': 3,
   '2-String Kite': 3,
   'XY-Wing': 3,
@@ -28,7 +31,11 @@ const STRATEGY_TIERS: Record<string, number> = {
   'XY-Chain': 4,
   'ALS-XZ': 4,
   'ALS-XY-Wing': 4,
-  'Forcing Chains': 4,
+  'Sue de Coq': 4,
+
+  'AIC': 5,
+  'Grouped AIC': 5,
+  'Forcing Chains': 5,
 };
 
 const TIER_LABELS: Record<number, string> = {
@@ -37,6 +44,7 @@ const TIER_LABELS: Record<number, string> = {
   2: 'Medium',
   3: 'Hard',
   4: 'Expert',
+  5: 'Extreme',
 };
 
 export function assessDifficulty(steps: SolveStep[]): { level: number; label: string } {
